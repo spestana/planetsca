@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "PyPlanetSCA Python Library"
 version = "0.1.0"
-description = ""
+description = "Mapping snow covered areas (SCA) from high-resolution PlanetScope images using Random Forest model"
 authors = ["Ian Chiu"]
 
 [tool.poetry.dependencies]
@@ -15,7 +15,7 @@ pytest = "^6.2.5"
 pre-commit = "^2.17.0"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.0.0", ]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
