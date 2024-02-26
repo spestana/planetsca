@@ -1,3 +1,12 @@
+import numpy as np
+import pandas as pd
+import geopandas as gpd
+import rasterio
+from rasterio import features
+from rasterio.enums import MergeAlg
+import warnings
+warnings.filterwarnings('ignore')
+
 def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output): #Helper function for data_labeling
     vector = gpd.read_file(dir_vector)
     # Get list of geometries for all features in vector file
@@ -60,3 +69,6 @@ def data_labeling(dir_ROI, dir_raster, dir_ROIraster, dir_samples_root, dir_samp
         df_train.to_csv(dir_samples, index = False)
     else:
         df_train = pd.read_csv(dir_samples)
+
+    return(df_train)
+

@@ -1,4 +1,15 @@
-def train_model(dir_model, dir_score, n_estimators, max_depth, max_features, random_state):  #Allowing for model paramter changing in function  
+import time
+import pandas as pd
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import RepeatedStratifiedKFold
+from sklearn.ensemble import RandomForestClassifier
+import matplotlib.pyplot as plt
+import joblib
+import warnings
+warnings.filterwarnings('ignore')
+
+
+def train_model(dir_model, dir_score, n_estimators, max_depth, max_features, random_state, df_train):  #Allowing for model paramter changing in function  
     flag_train = False
 
     # get data 
