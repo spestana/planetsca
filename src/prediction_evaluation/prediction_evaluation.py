@@ -5,6 +5,7 @@ import rasterio
 import pandas as pd
 import numpy as np
 
+#Helper Function
 def run_sca_prediction(dir_raster, dir_out, nodata_flag, model):
     """
     This function predicts binary snow cover for planet satellite images using 
@@ -68,6 +69,7 @@ def run_sca_prediction(dir_raster, dir_out, nodata_flag, model):
                         nodata = nodata_flag) as dst:
                     dst.write(img_prediction, indexes = 1, masked=True)
 
+#Ran
 def single_image_evaluation(dir_raster, dir_model, dir_out):
     # dir_raster = 'data/download/20180528_181110_1025_3B_AnalyticMS_SR_clip.tif'
     # dir_model = "random_forest_20240116_binary_174K.joblib"

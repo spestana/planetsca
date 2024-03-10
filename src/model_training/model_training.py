@@ -8,10 +8,10 @@ import joblib
 import warnings
 warnings.filterwarnings('ignore')
 
+#Idea for testing - call function in the script
+#One end function that uses everything as helper methods - just the run model on image and can control everything through that function
 
 def train_model(dir_model, dir_score, n_estimators, max_depth, max_features, random_state, df_train):  #Allowing for model paramter changing in function  
-    flag_train = False
-
     # get data 
     # dir_model = 'random_forest_20240116_binary_174K.joblib'
     # dir_score = 'random_forest_20240116_binary_174K_scores.csv'

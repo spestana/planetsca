@@ -1,3 +1,4 @@
+#Check pip list before running Venv
 import numpy as np
 import pandas as pd
 import geopandas as gpd
@@ -7,6 +8,7 @@ from rasterio.enums import MergeAlg
 import warnings
 warnings.filterwarnings('ignore')
 
+#Helper function
 def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output): #Helper function for data_labeling
     vector = gpd.read_file(dir_vector)
     # Get list of geometries for all features in vector file
@@ -36,16 +38,26 @@ def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output): #Helper func
             dst.write(rasterized, indexes = 1)
     return rasterized
 
-
-def data_labeling(dir_ROI, dir_raster, dir_ROIraster, dir_samples_root, dir_samples): #Not sure what to call this function
-    flag_rasterize = False
-
+#Ran function
+#Need to figure out what and where these folders are, function runs without them
+#dir_ROI - Not necessary?
+#dir_raster - Not necessary?
+#dir_ROIraster - Not necessary?
+#dir_samples_root - Not necessary?
+#dir_samples - Necessary
+def data_labeling(dir_samples): #Not sure what to call this function
     #FILE PATHS CHANGE DEPENDING ON THE PACKAGE - THESE ARE OLD
     # dir_ROI = "./data/ROI/20180528_181110_add_UTM11.shp"
     # dir_raster = "./data/planet/train/20180528_181110_1025_3B_AnalyticMS_SR_clip.tif"
     # dir_ROIraster = './data/ROI/ROI_20180528_181110_add.tif'
     # dir_samples_root = './data/samples/sample_'
     # dir_samples = 'sample_174k.csv'
+
+    flag_rasterize = False
+    dir_ROI = ""
+    dir_raster = ""
+    dir_ROIraster = ""
+    dir_samples_root = ""
 
     if flag_rasterize:
         flag_output = True
@@ -72,3 +84,4 @@ def data_labeling(dir_ROI, dir_raster, dir_ROIraster, dir_samples_root, dir_samp
 
     return(df_train)
 
+    

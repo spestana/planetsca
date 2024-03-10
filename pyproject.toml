@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "PyPlanetSCA Python Library"
+name = "PyPlanetSCA_Python_Library"
 version = "0.1.0"
 description = "Mapping snow covered areas (SCA) from high-resolution PlanetScope images using Random Forest model"
 authors = ["Ian Chiu"]
