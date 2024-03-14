@@ -1,18 +1,18 @@
+import glob
+import os
+import time
+import warnings
+
+import geopandas as gpd
+import joblib
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import geopandas as gpd
 import rasterio
 from rasterio import features
 from rasterio.enums import MergeAlg
-import time
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import RepeatedStratifiedKFold
 from sklearn.ensemble import RandomForestClassifier
-import matplotlib.pyplot as plt
-import joblib
-import os
-import glob
-import warnings
+from sklearn.model_selection import RepeatedStratifiedKFold, cross_val_score
 
 warnings.filterwarnings("ignore")
 
@@ -20,7 +20,7 @@ warnings.filterwarnings("ignore")
 def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output):
     vector = gpd.read_file(dir_vector)
     # Get list of geometries for all features in vector file
-    geom = [shapes for shapes in vector.geometry]
+    list(vector.geometry)
 
     # Open example raster
     raster = rasterio.open(dir_raster)
@@ -127,6 +127,7 @@ def run_sca_prediction(dir_raster, dir_out, nodata_flag, model):
             nodata=nodata_flag,
         ) as dst:
             dst.write(img_prediction, indexes=1, masked=True)
+
 
 def everything(
     dir_samples: str,
@@ -239,4 +240,3 @@ def everything(
 
     nodata_flag = 9
     run_sca_prediction(dir_raster, dir_out, nodata_flag, model)
-
