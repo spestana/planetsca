@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 import joblib
 import os
 import glob
-import typer
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -240,6 +239,4 @@ def everything(
 
     nodata_flag = 9
     run_sca_prediction(dir_raster, dir_out, nodata_flag, model)
-    
-def cli():
-    typer.run(everything)
+
