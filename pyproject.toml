@@ -5,11 +5,15 @@ build-backend = "hatchling.build"
 [project]
 name = "PyPlanetSCA"
 version = "0.1.0"
+
+[project.metadata]
 description = "Mapping snow covered areas (SCA) from high-resolution PlanetScope images using Random Forest model"
 authors = [
-    { name = "Ian Chiu", email = "ianchiu333@gmail.com" },
+    { name = "Ian Chiu", email = "ianchiu333@gmail.com" }
 ]
+
 requires-python = ">=3.8"
+license = "MIT"
 dependencies = [
     "dvc>=2.10.0",
     "hydra-core>=1.1.1",
