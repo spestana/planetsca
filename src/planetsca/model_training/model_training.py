@@ -25,7 +25,7 @@ def train_model(dir_model, dir_score, n_estimators, max_depth, max_features, ran
         # X[X['ndvi']> 1.0]['ndvi'] = 1.0
         # X[np.isfinite(X['ndvi']) == False]['ndvi'] = np.nan
         # define the model
-        model = RandomForestClassifier(n_estimators, max_depth, max_features, random_state)
+        model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, max_features=max_features, random_state=random_state)
         # evaluate the model
         cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=1, random_state=1) #Could parametize this as well
         n_accuracy = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
