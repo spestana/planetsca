@@ -25,7 +25,6 @@ def run_sca_prediction(dir_raster, dir_out, nodata_flag, model):
     if os.path.isdir(dir_raster):
         file_list = glob.glob(dir_raster + "./**/*SR*.tif", recursive=True)
     elif os.path.isfile(dir_raster):
-        print("test")
         file_list = [dir_raster]
 
     for f in file_list:
