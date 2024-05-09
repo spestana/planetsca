@@ -8,11 +8,83 @@ import subprocess
 import json
 import pathlib
 import pandas as pd
-from geojson_551 import domain
 import rasterio
+import time
 from rasterio.plot import show
 
 headers = {'Content-Type': 'application/json'}
+
+#---------------------------- geojson_551.py
+geo_json_geometry = {
+  "type": "Polygon",
+  "coordinates": [
+    [
+      [
+        -105.88556387570844,
+        40.51902315502832
+      ],
+      [
+        -105.87210147791147,
+        40.51902315502832
+      ],
+      [
+        -105.87210147791147,
+        40.52888545899697
+      ],
+      [
+        -105.88556387570844,
+        40.52888545899697
+      ],
+      [
+        -105.88556387570844,
+        40.51902315502832
+      ]
+    ]
+  ]
+}
+
+# filter for items the overlap with our chosen geometry
+geometry_filter = {
+  "type": "GeometryFilter",
+  "field_name": "geometry",
+  "config": geo_json_geometry
+}
+
+# filter images acquired in a certain date range
+date_range_filter = {
+  "type": "DateRangeFilter",
+  "field_name": "acquired",
+  "config": {
+    "gte": "2023-07-25T00:00:00.000Z",
+    "lte": "2023-09-01T00:00:00.000Z"
+  }
+}
+
+# filter any images which are more than 50% clouds
+cloud_cover_filter = {
+  "type": "RangeFilter",
+  "field_name": "cloud_cover",
+  "config": {
+    "lte": 0.05
+  }
+}
+
+# create a filter that combines our geo and date filters
+# could also use an "OrFilter"
+#domain = {
+#  "type": "AndFilter",
+#  "config": [geometry_filter, date_range_filter]
+#}
+
+# create a filter that combines our geo and date filters
+# could also use an "OrFilter"
+domain = {
+  "type": "AndFilter",
+  "config": [geometry_filter, date_range_filter, cloud_cover_filter]
+}
+
+#----------------------------
+
 
 #---------------------------- Pre-built functions
 
@@ -58,30 +130,36 @@ def order_now(payload,apiKey):
         print(f'Failed with Exception code : {response.status_code}')
         
 def download_results(order_url,folder, apiKey, overwrite=False):
-    r = requests.get(order_url, auth=HTTPBasicAuth(apiKey, ''))
-    try:
-        if r.status_code ==200:
-            response = r.json()
-            results = response['_links']['results']
-            results_urls = [r['location'] for r in results]
-            results_names = [r['name'] for r in results]
-            print('{} items to download'.format(len(results_urls)))
+    print("Attempting to download") #Tell user what to do
+    request_fufilled = True
+    while request_fufilled:
+      r = requests.get(order_url, auth=HTTPBasicAuth(apiKey, ''))
+      try:
+          if r.status_code ==200:
+              response = r.json()
+              results = response['_links']['results']
+              results_urls = [r['location'] for r in results]
+              results_names = [r['name'] for r in results]
+              print('{} items to download'.format(len(results_urls)))
 
-            for url, name in zip(results_urls, results_names):
-                path = pathlib.Path(os.path.join(folder,name))
+              for url, name in zip(results_urls, results_names):
+                  path = pathlib.Path(os.path.join(folder,name))
 
-                if overwrite or not path.exists():
-                    print('downloading {} to {}'.format(name, path))
-                    r = requests.get(url, allow_redirects=True)
-                    path.parent.mkdir(parents=True, exist_ok=True)
-                    open(path, 'wb').write(r.content)
-                else:
-                    print('{} already exists, skipping {}'.format(path, name))
-        else:
-            print(f'Failed with response {r.status_code}')
-    except:
-        print('data not ready yet')
-    r.close()
+                  if overwrite or not path.exists():
+                      print('downloading {} to {}'.format(name, path))
+                      r = requests.get(url, allow_redirects=True)
+                      path.parent.mkdir(parents=True, exist_ok=True)
+                      open(path, 'wb').write(r.content)
+                  else:
+                      print('{} already exists, skipping {}'.format(path, name))
+          else:
+              print(f'Failed with response {r.status_code}')
+          request_fufilled = False
+      #Data isn't ready yet, need to code in functionality to rerun the download when data is ready
+      except:
+          print('data not ready yet')
+      r.close()
+      time.sleep(60)
     # except Exception as e:
     #     print(e)
     #     print(order_url)
@@ -156,17 +234,17 @@ def save_data_to_csv(order_urls):
     print(order_urls)
     order_urls.to_csv('urlSaver.csv', index = None)
 
-def download_orders(order_urls, out_direc):
+def download_orders(order_urls, out_direc, apiKey):
     # download the orders once ready
     # outputs of "data not ready yet" mean that the orders need more time to process before downloading
     for url in order_urls.itertuples():
         print(url.index,url.order_url)
         print("start downloading data to".format(), out_direc + url.ID_geom)
         if url.order_url != None:
-            try:
-                nantest = ~np.isnan(url.order_url)
-            except:
-                download_results(url.order_url,folder = out_direc + url.ID_geom)
+          try:
+            nantest = ~np.isnan(url.order_url)
+          except:
+            download_results(url.order_url,folder = out_direc + url.ID_geom, apiKey = apiKey)
         # break
 
 def display_image(fp):

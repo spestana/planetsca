@@ -1,53 +1,81 @@
 # PyPlanetSCA Python Library
 
-## Tools used in this project
-* [Poetry](https://towardsdatascience.com/how-to-effortlessly-publish-your-python-package-to-pypi-using-poetry-44b305362f9f): Dependency management - [article](https://mathdatasimplified.com/2023/06/12/poetry-a-better-way-to-manage-python-dependencies/)
-* [hydra](https://hydra.cc/): Manage configuration files - [article](https://mathdatasimplified.com/2023/05/25/stop-hard-coding-in-a-data-science-project-use-configuration-files-instead/)
-* [pre-commit plugins](https://pre-commit.com/): Automate code reviewing formatting
-* [DVC](https://dvc.org/): Data version control - [article](https://mathdatasimplified.com/2023/02/20/introduction-to-dvc-data-version-control-tool-for-machine-learning-projects-2/)
-* [pdoc](https://github.com/pdoc3/pdoc): Automatically create an API documentation for your project
+This is a python library for mapping snow covered areas (SCA) from high-resolution PlanetScope images using a Random Forest model. 
 
-## Set up the environment
-1. Install [Poetry](https://python-poetry.org/docs/#installation)
-2. Set up the environment:
+Originally modeled from Kehan Yang: https://github.com/KehanGit/High_resolution_snow_cover_mapping/blob/main/01_download_planetscope_images.ipynb
+
+## Installation
+
+1. To install the python package, use: 
+
 ```bash
-make env 
+pip install -i https://test.pypi.org/simple/ PyPlanetSCA
 ```
 
-## Install dependencies
-To install all dependencies for this project, run:
+2. Install additional packages:
 ```bash
-poetry install
+pip install numpy
+pip install pandas
+pip install scikit-learn
+pip install geopandas
+pip install rasterio
+pip install matplotlib
+pip install joblib
+```
+## Running the code
+
+1. Import modules
+```
+from planetsca.data_gathering import data_gathering as dg
+from planetsca.data_preparation import data_preparation as dp
+from planetsca.model_training import model_training as mt
+from planetsca.prediction_evaluation import prediction_evaluation as pe
+import time;
+import numpy as np
 ```
 
-To install a new package, run:
-```bash
-poetry add <package-name>
+2. Set Variables and folder locations
+```
+domainID = '551'
+# enter the Planet user API key
+apiKey = '_________'
+item_type = "PSScene"
+asset_type = "ortho_analytic_4b_sr"
+bundle_type = "analytic_sr_udm2"
 ```
 
-## Version your data
-To track changes to the "data" directory, type:
-```bash
-dvc add data
+3. Data Gathering
 ```
 
-This command will create the "data.dvc" file, which contains a unique identifier and the location of the data directory in the file system.
-
-To keep track of the data associated with a particular version, commit the "data.dvc" file to Git:
-```bash
-git add data.dvc
-git commit -m "add data"
+# data download location
+out_direc = '/Users/ianch/PyPlanetSCAPythonLibrary/Test_Files'
+domain_geometry = dg.domain_shape()
+print(domain_geometry)
+result = dg.api_search(item_type, apiKey)
+geojson_data, gdf = dg.downloadable_PlanetIDs(result, domain_geometry)
+id_list = dg.id_gemoetry_lists(geojson_data, gdf)
+order_urls = dg.submit_orders(id_list, item_type, bundle_type, apiKey)
+dg.save_data_to_csv(order_urls)
+dg.download_orders(order_urls, out_direc, apiKey)
+#dg.display_image(fp)
 ```
 
-To push the data to remote storage, type:
-```bash
-dvc push 
+4. Data Preparation
+```
+df_train = dp.data_labeling("","","", "", 'sample_174k.csv')
+dir_model = 'random_forest_20240116_binary_174K.joblib'
+dir_score = 'random_forest_20240116_binary_174K_scores.csv'
 ```
 
-## Auto-generate API documentation
+5. Model Training
+``` 
+mt.train_model(dir_model, dir_score, 10, 10, 4, 1, df_train)
+```
 
-To auto-generate API document for your project, run:
 
-```bash
-make docs
+7. Prediction Evaluation
+```
+dir_raster = '20180528_181110_1025_3B_AnalyticMS_SR_clip.tiff'
+dir_out = 'SCA'
+pe.single_image_evaluation(dir_raster, dir_model, dir_out)
 ```
