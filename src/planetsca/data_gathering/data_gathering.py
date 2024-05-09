@@ -132,6 +132,7 @@ def order_now(payload,apiKey):
 def download_results(order_url,folder, apiKey, overwrite=False):
     print("Attempting to download") #Tell user what to do
     request_fufilled = True
+    counter = 1
     while request_fufilled:
       r = requests.get(order_url, auth=HTTPBasicAuth(apiKey, ''))
       try:
@@ -157,7 +158,7 @@ def download_results(order_url,folder, apiKey, overwrite=False):
           request_fufilled = False
       #Data isn't ready yet, need to code in functionality to rerun the download when data is ready
       except:
-          print('data not ready yet')
+          print('data not ready yet, Try number: ' + counter)
       r.close()
       time.sleep(60)
     # except Exception as e:

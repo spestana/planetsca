@@ -4,6 +4,8 @@ This is a python library for mapping snow covered areas (SCA) from high-resoluti
 
 Originally modeled from Kehan Yang: https://github.com/KehanGit/High_resolution_snow_cover_mapping/blob/main/01_download_planetscope_images.ipynb
 
+TestPyPi Link: https://test.pypi.org/project/PyPlanetSCA/#description
+
 ## Installation
 
 1. To install the python package, use: 
@@ -30,7 +32,6 @@ from planetsca.data_gathering import data_gathering as dg
 from planetsca.data_preparation import data_preparation as dp
 from planetsca.model_training import model_training as mt
 from planetsca.prediction_evaluation import prediction_evaluation as pe
-import time;
 import numpy as np
 ```
 
@@ -48,7 +49,7 @@ bundle_type = "analytic_sr_udm2"
 ```
 
 # data download location
-out_direc = '/Users/ianch/PyPlanetSCAPythonLibrary/Test_Files'
+out_direc = '/Users/ianch/PyPlanetSCAPythonLibrary/Test_Files/'
 domain_geometry = dg.domain_shape()
 print(domain_geometry)
 result = dg.api_search(item_type, apiKey)
