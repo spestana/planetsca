@@ -80,3 +80,20 @@ dir_raster = '20180528_181110_1025_3B_AnalyticMS_SR_clip.tiff'
 dir_out = 'SCA'
 pe.single_image_evaluation(dir_raster, dir_model, dir_out)
 ```
+
+## Functions
+
+### data_gathering module
+
+1. build_payload(item_ids, item_type, bundle_type, aoi_coordinates):
+2. order_now(payload,apiKey):
+3. download_results(order_url,folder, apiKey, overwrite=False):
+4. domain_shape():
+5. api_search(item_type, apiKey):
+6. downloadable_PlanetIDs(result, domain_geometry):
+7. id_gemoetry_lists(geojson_data, gdf):
+8. order_status(apiKey, item_type, asset_type, id_list):
+9. submit_orders(id_list, item_type, bundle_type, apiKey):
+10. save_data_to_csv(order_urls):
+11. download_orders(order_urls, out_direc, apiKey):
+12. display_image(fp):
