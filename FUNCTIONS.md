@@ -7,7 +7,7 @@
 4. [Prediction Evaluation Module](#prediction_evaluation)
 
 
-### data_gathering module <a name="data_gathering"></a> [Table of Contents](#table_of_contents)
+### data_gathering module <a name="data_gathering"></a> #####[Table of Contents](#table_of_contents)
 
 **1. build_payload(item_ids, item_type, bundle_type, aoi_coordinates)** 
 >*Description:* Builds Payload to send to Planet
