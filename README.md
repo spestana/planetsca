@@ -9,8 +9,8 @@ Originally modeled from Kehan Yang:
 
 #### Table of Contents <a name="table_of_contents"></a>
 1. [Installation](#installation)
-2. [Running the Code](#Running)
-3. [Functions](#Functions)
+2. [Running the Code](#running)
+3. [Functions](#functions)
 4. [Virtual Environments](#VENV)
 
 <br></br>
@@ -28,7 +28,7 @@ pip install -r requirements.txt
 ```
 
 <br></br>
-## Running the code <a name="Running"></a>
+## Running the code <a name="running"></a>
 
 1. Import modules
 ```
@@ -86,7 +86,7 @@ pe.single_image_evaluation(dir_raster, dir_model, dir_out)
 ```
 
 <br></br>
-## Functions <a name="Functions"></a>
+## Functions <a name="functions"></a>
 Please see the FUNCTIONS.md file for additional documentation of functions:
 [FUNCTIONS.md](https://github.com/DSHydro/PyPlanetSCA-Python-Library/blob/main/FUNCTIONS.md)
 
