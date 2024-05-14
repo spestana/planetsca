@@ -1,6 +1,6 @@
 ## Functions
 
-### Table of Contents
+### Table of Contents <a name="table_of_contents"></a>
 1. [Data Gathering Module](#data_gathering)
 2. [Data_Preparation Module](#data_preparation)
 3. [Model Training Module](#model_training)
@@ -8,6 +8,7 @@
 
 
 ### data_gathering module <a name="data_gathering"></a>
+[Table of Contents](#table_of_contents)
 
 **1. build_payload(item_ids, item_type, bundle_type, aoi_coordinates)** 
 >*Description:* Builds Payload to send to Planet
@@ -73,7 +74,6 @@
 >
 >*Outputs:* id_list
 
-
 **9. order_status(apiKey, item_type, asset_type, id_list)** 
 >*Description:* Checks the status of a current order using requested Planet data
 >
@@ -125,6 +125,7 @@
 
 
 ### data_preparation module <a name="data_preparation"></a>
+[Table of Contents](#table_of_contents)
     
 **1. vector_rasterize(dir_vector, dir_raster, dir_out, flag_output)** 
 >*Description:* 
@@ -152,6 +153,7 @@
 
 
 ### model_training module <a name="model_training"></a>
+[Table of Contents](#table_of_contents)
 
 **1. train_model(dir_model, dir_score, n_estimators, max_depth, max_features, random_state, n_splits, n_repeats, df_train)**
 >*Description:* Trains a random forest model for snow covered area evaluations
@@ -172,6 +174,7 @@
 
 
 ### prediction_evaluation module <a name="prediction_evaluation"></a>
+[Table of Contents](#table_of_contents)
 
 **1. run_sca_prediction(dir_raster, dir_out, nodata_flag, model)**
 >*Description:* This function predicts binary snow cover for planet satellite images using the pre-trained random forest model
