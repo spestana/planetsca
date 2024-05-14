@@ -8,13 +8,13 @@ Originally modeled from Kehan Yang:
 [TestPyPi](https://test.pypi.org/project/PyPlanetSCA/#description)
 
 #### Table of Contents <a name="table_of_contents"></a>
-1. [Installation](#Installation)
+1. [Installation](#installation)
 2. [Running the Code](#Running)
 3. [Functions](#Functions)
 4. [Virtual Environments](#VENV)
 
 <br></br>
-## Installation <a name="Installation"></a>
+## Installation <a name="installation"></a>
 
 1. To install the python package, use: 
 
@@ -91,7 +91,7 @@ Please see the FUNCTIONS.md file for additional documentation of functions:
 [FUNCTIONS.md](https://github.com/DSHydro/PyPlanetSCA-Python-Library/blob/main/FUNCTIONS.md)
 
 <br></br>
-## Setting up a Virtual Environment (VENV) on VSCode <a name="VENV"></a>
+## Setting up a Virtual Environment (VENV) on VSCode <a name="venv"></a>
 ### Creating a VENV is recommended for this project as it ensures that there are no package conflicts and that troubleshooting is much easier.
 ### Instructions are summarized from [here](https://code.visualstudio.com/docs/python/environments)
 
