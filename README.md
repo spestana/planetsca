@@ -7,6 +7,7 @@ Originally modeled from Kehan Yang:
 
 [TestPyPi](https://test.pypi.org/project/PyPlanetSCA/#description)
 
+<br></br>
 #### Table of Contents <a name="table_of_contents"></a>
 1. [Installation](#Installation)
 2. [Functions](#Functions)
