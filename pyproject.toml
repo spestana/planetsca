@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "PyPlanetSCA"
-version = "0.3.3.4"
+version = "0.3.4.0"
 
 [project.metadata]
 description = "Mapping snow covered areas (SCA) from high-resolution PlanetScope images using Random Forest model"
