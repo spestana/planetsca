@@ -9,8 +9,9 @@ Originally modeled from Kehan Yang:
 
 #### Table of Contents <a name="table_of_contents"></a>
 1. [Installation](#Installation)
-2. [Functions](#Functions)
-3. [Virtual Environments](#VENV)
+2. [Running the Code](#Running)
+3. [Functions](#Functions)
+4. [Virtual Environments](#VENV)
 
 <br></br>
 ## Installation <a name="Installation"></a>
@@ -25,7 +26,9 @@ pip install -i https://test.pypi.org/simple/ PyPlanetSCA
 ```bash
 pip install -r requirements.txt
 ```
-## Running the code
+
+<br></br>
+## Running the code <a name="Running"></a>
 
 1. Import modules
 ```
@@ -82,10 +85,12 @@ dir_out = 'SCA'
 pe.single_image_evaluation(dir_raster, dir_model, dir_out)
 ```
 
+<br></br>
 ## Functions <a name="Functions"></a>
 Please see the FUNCTIONS.md file for additional documentation of functions:
 [FUNCTIONS.md](https://github.com/DSHydro/PyPlanetSCA-Python-Library/blob/main/FUNCTIONS.md)
 
+<br></br>
 ## Setting up a Virtual Environment (VENV) on VSCode <a name="VENV"></a>
 ### Creating a VENV is recommended for this project as it ensures that there are no package conflicts and that troubleshooting is much easier.
 ### Instructions are summarized from [here](https://code.visualstudio.com/docs/python/environments)
