@@ -7,7 +7,7 @@
 4. [Prediction Evaluation Module](#prediction_evaluation)
 
 
-
+<br/><br/>
 ### data_gathering module <a name="data_gathering"></a> 
 ##### [Table of Contents](#table_of_contents)
 
@@ -124,7 +124,7 @@
 >*Outputs:* N/A
 
 
-
+<br/><br/>
 ### data_preparation module <a name="data_preparation"></a>
 ##### [Table of Contents](#table_of_contents)
     
@@ -152,7 +152,7 @@
 >*Outputs:* df_train
 
 
-
+<br/><br/>
 ### model_training module <a name="model_training"></a>
 ##### [Table of Contents](#table_of_contents)
 
@@ -173,7 +173,7 @@
 >*Outputs:* N/A (Saves trained model at dir_model)
 
 
-
+<br/><br/>
 ### prediction_evaluation module <a name="prediction_evaluation"></a>
 ##### [Table of Contents](#table_of_contents)
 
