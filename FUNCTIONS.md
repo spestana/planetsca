@@ -115,6 +115,109 @@
 >
 >*Outputs:* N/A
 
- 
-    
 
+
+### data_preparation module
+    
+**1. vector_rasterize(dir_vector, dir_raster, dir_out, flag_output)** 
+>*Description:* 
+>
+>*Parameters:*
+> - dir_vector: Vector directory (Can be left empty)
+> - dir_raster: The directory or the file of planet images (Can be left empty)
+> - dir_out: Output directory (Can be left empty)
+> - flag_output: Flag output set to true if condition is met to enable raster variable setting
+>
+>*Outputs:* rasterized
+
+**2. data_labeling(dir_ROI, dir_raster, dir_ROIraster, dir_samples_root, dir_samples)** 
+>*Description:* Sets up, labels, and cleans up data for training
+>
+>*Parameters:*
+> - dir_ROI: ROI directory (Can be left empty)
+> - dir_raster: The directory or the file of planet images (Can be left empty)
+> - dir_ROIraster: ROIraster directory (Can be left empty)
+> - dir_samples_root: samples_root directory (Can be left empty)
+> - dir_samples: samples directory
+>
+>*Outputs:* df_train
+
+
+
+### model_training module
+
+**1. train_model(dir_model, dir_score, n_estimators, max_depth, max_features, random_state, n_splits, n_repeats, df_train)**
+>*Description:* Trains a random forest model for snow covered area evaluations
+>
+>*Parameters:*
+> - dir_model: Model directory
+> - dir_score: Score directory
+> - n_estimators: n_estimators parameter for RandomForestClassifier(Model parameter)
+> - max_depth: max_depth parameter for RandomForestClassifier(Model parameter)
+> - max_features: max_features parameter for RandomForestClassifier(Model parameter)
+> - random_state: random_state parameter for RandomForestClassifier(Model parameter)
+> - n_splits: n_splits parameter for RepeatedStratifiedKFold(Evaluation parameter)
+> - n_repeats: n_repeats parameter for RepeatedStratifiedKFold(Evaluation parameter)
+> - df_train: Training data from data_labeling Function
+>
+>*Outputs:* N/A (Saves trained model at dir_model)
+
+
+
+### prediction_evaluation.py
+
+**1. run_sca_prediction(dir_raster, dir_out, nodata_flag, model)**
+>*Description:* This function predicts binary snow cover for planet satellite images using the pre-trained random forest model
+>
+>*Parameters:*
+> - dir_raster: The directory or the file of planet images
+> - dir_out: The directory where output snow cover images will be stored
+> - nodata_flag: The value used to represent no data in the predicted snow cover image
+    defult value is 9.
+> - model: The model used to predict snow cover
+>
+>*Outputs:* N/A
+
+**2. run_sca_prediction_band(f_raster, file_out, nodata_flag, model)**
+>*Description:* Need help on what the difference for these is
+>
+>*Parameters:*
+> - f_raster: File of planet images
+> - file_out: The directory that will store the output file
+> - nodata_flag: The value used to represent no data in the predicted snow cover image
+    defult value is 9.
+> - model: The model used to predict snow cover
+>
+>*Outputs:* N/A
+
+**3. run_sca_prediction_fusion(dir_raster, dir_out, nodata_flag, model)**
+>*Description:* Need help on what the difference for these is
+>
+>*Parameters:*
+> - dir_raster: The directory or the file of planet images
+> - dir_out: The directory where output snow cover images will be stored
+> - nodata_flag: The value used to represent no data in the predicted snow cover image
+    defult value is 9.
+> - model: The model used to predict snow cover
+>
+>*Outputs:* N/A
+
+>**4. run_sca_prediction_meadows(dir_raster, dir_out, nodata_flag, model)**
+>*Description:* Need help on what the difference for these is
+>
+>*Parameters:*
+> - dir_raster: The directory or the file of planet images
+> - dir_out: The directory where output snow cover images will be stored
+> - nodata_flag: The value used to represent no data in the predicted snow cover image
+    defult value is 9.
+> - model: The model used to predict snow cover
+>
+>*Outputs:* N/A
+
+> **5. single_image_evaluation(dir_raster, dir_model, dir_out)**
+>*Description:* Uses run_sca_prediction for a single image
+>
+>*Parameters:*
+> - dir_raster: The directory or the file of planet images
+> - dir_model: The directory where the model is stored
+> - dir_out: The directory where the output snow cover image will be stored
