@@ -1,10 +1,10 @@
 ## Functions
 
 ### Table of Contents
-1. [data_gathering module](#data_gathering)
-2. [data_preparation](###data_preparation_module)
-3. [Third Example](#third-example)
-4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
+1. [Data Gathering Module](#data_gathering)
+2. [Data_Preparation Module](#data_preparation)
+3. [Model Training Module](#model_training)
+4. [Prediction Evaluation Module](#prediction_evaluation)
 
 
 ### data_gathering module <a name="data_gathering"></a>
@@ -124,7 +124,7 @@
 
 
 
-### data_preparation module
+### data_preparation module <a name="data_preparation"></a>
     
 **1. vector_rasterize(dir_vector, dir_raster, dir_out, flag_output)** 
 >*Description:* 
@@ -151,7 +151,7 @@
 
 
 
-### model_training module
+### model_training module <a name="model_training"></a>
 
 **1. train_model(dir_model, dir_score, n_estimators, max_depth, max_features, random_state, n_splits, n_repeats, df_train)**
 >*Description:* Trains a random forest model for snow covered area evaluations
@@ -171,7 +171,7 @@
 
 
 
-### prediction_evaluation module
+### prediction_evaluation module <a name="prediction_evaluation"></a>
 
 **1. run_sca_prediction(dir_raster, dir_out, nodata_flag, model)**
 >*Description:* This function predicts binary snow cover for planet satellite images using the pre-trained random forest model
