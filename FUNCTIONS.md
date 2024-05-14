@@ -2,14 +2,16 @@
 
 ### data_gathering module
 
-1. build_payload(item_ids, item_type, bundle_type, aoi_coordinates): Builds Payload to send to Planet
+**build_payload(item_ids, item_type, bundle_type, aoi_coordinates)** 
+*Description:* Builds Payload to send to Planet
+*Parameters:*
    - item_ids: Item ID from Planet
    - item_type: Item Type from the Planet Catalog, ex: PSScene OR REOrthoTile [More Info](https://developers.planet.com/docs/apis/data/items-assets/)
    - bundle_type: Product Bundle from Planet
    - aoi_coordinates: Area of Interest Coordinates
-   - Return:
+*Outputs:* Payload
 
-2. order_now(payload,apiKey): Order using Payload from Planet
+**order_now(payload,apiKey)**: Order using Payload from Planet
    - payload: Payload to send to Planet
    - apiKey: Your Personal API Key from Planet [More Info](https://developers.planet.com/quickstart/apis/)
    - 
