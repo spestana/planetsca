@@ -14,15 +14,9 @@ TestPyPi Link: https://test.pypi.org/project/PyPlanetSCA/#description
 pip install -i https://test.pypi.org/simple/ PyPlanetSCA
 ```
 
-2. Install additional packages:
+2. Install packages in requirements.txt:
 ```bash
-pip install numpy
-pip install pandas
-pip install scikit-learn
-pip install geopandas
-pip install rasterio
-pip install matplotlib
-pip install joblib
+pip install -r requirements.txt
 ```
 ## Running the code
 
