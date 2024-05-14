@@ -1,13 +1,18 @@
 # PyPlanetSCA Python Library
 
-This is a python library for mapping snow covered areas (SCA) from high-resolution PlanetScope images using a Random Forest model. 
+### This is a python library for mapping snow covered areas (SCA) from high-resolution PlanetScope images using a Random Forest model. 
 
 Originally modeled from Kehan Yang: 
 [Kehan's Project](https://github.com/KehanGit/High_resolution_snow_cover_mapping/blob/main/01_download_planetscope_images.ipynb)
 
 [TestPyPi](https://test.pypi.org/project/PyPlanetSCA/#description)
 
-## Installation
+#### Table of Contents <a name="table_of_contents"></a>
+1. [Installation](#Installation)
+2. [Functions](#Functions)
+3. [Virtual Environments](#VENV)
+
+## Installation <a name="Installation"></a>
 
 1. To install the python package, use: 
 
@@ -76,6 +81,18 @@ dir_out = 'SCA'
 pe.single_image_evaluation(dir_raster, dir_model, dir_out)
 ```
 
-## Functions
+## Functions <a name="Functions"></a>
 Please see the FUNCTIONS.md file for additional documentation of functions:
 [FUNCTIONS.md](https://github.com/DSHydro/PyPlanetSCA-Python-Library/blob/main/FUNCTIONS.md)
+
+## Setting up a Virtual Environment (VENV) on VSCode <a name="VENV"></a>
+### Creating a VENV is recommended for this project as it ensures that there are no package conflicts and that troubleshooting is much easier.
+### Instructions are summarized from [here](https://code.visualstudio.com/docs/python/environments)
+
+1. Open Command Palette (Ctrl + Shift + P)
+2. Select Venv
+3. Select Desired Interpeter Path (I use 3.12.2)
+4. Notification should show up on the bottom right corner titled "Creating environment (Show logs): Creating venv...
+5. The venv is set up and activated if you see " *Python Version* (.'venv':venv)"
+6. *NOTE* After setting up a venv once, VScode will automatically start up the virtual environment alongside with VScode. There is no need to repeat these steps unless you do not see step 5. 
+
