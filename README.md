@@ -77,5 +77,5 @@ pe.single_image_evaluation(dir_raster, dir_model, dir_out)
 ```
 
 ## Functions
-Please see the FUNCTIONS.md file for additional documentation of functions
+Please see the FUNCTIONS.md file for additional documentation of functions:
 [FUNCTIONS.md](https://github.com/DSHydro/PyPlanetSCA-Python-Library/blob/main/FUNCTIONS.md)
