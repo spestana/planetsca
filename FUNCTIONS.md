@@ -164,7 +164,7 @@
 
 
 
-### prediction_evaluation.py
+### prediction_evaluation module
 
 **1. run_sca_prediction(dir_raster, dir_out, nodata_flag, model)**
 >*Description:* This function predicts binary snow cover for planet satellite images using the pre-trained random forest model
@@ -202,7 +202,7 @@
 >
 >*Outputs:* N/A
 
->**4. run_sca_prediction_meadows(dir_raster, dir_out, nodata_flag, model)**
+**4. run_sca_prediction_meadows(dir_raster, dir_out, nodata_flag, model)**
 >*Description:* Need help on what the difference for these is
 >
 >*Parameters:*
@@ -214,7 +214,7 @@
 >
 >*Outputs:* N/A
 
-> **5. single_image_evaluation(dir_raster, dir_model, dir_out)**
+**5. single_image_evaluation(dir_raster, dir_model, dir_out)**
 >*Description:* Uses run_sca_prediction for a single image
 >
 >*Parameters:*
