@@ -2,9 +2,10 @@
 
 This is a python library for mapping snow covered areas (SCA) from high-resolution PlanetScope images using a Random Forest model. 
 
-Originally modeled from Kehan Yang: https://github.com/KehanGit/High_resolution_snow_cover_mapping/blob/main/01_download_planetscope_images.ipynb
+Originally modeled from Kehan Yang: 
+[Kehan's Project](https://github.com/KehanGit/High_resolution_snow_cover_mapping/blob/main/01_download_planetscope_images.ipynb)
 
-TestPyPi Link: https://test.pypi.org/project/PyPlanetSCA/#description
+[TestPyPi](https://test.pypi.org/project/PyPlanetSCA/#description)
 
 ## Installation
 
@@ -77,3 +78,4 @@ pe.single_image_evaluation(dir_raster, dir_model, dir_out)
 
 ## Functions
 Please see the FUNCTIONS.md file for additional documentation of functions
+[FUNCTIONS.md](https://github.com/DSHydro/PyPlanetSCA-Python-Library/blob/main/FUNCTIONS.md)
