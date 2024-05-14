@@ -1,5 +1,12 @@
 ## Functions
 
+### Table of Contents
+1. [data_gathering module](###data_gatheringmodule)
+2. [data_preparation](###data_preparationmodule)
+3. [Third Example](#third-example)
+4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
+
+
 ### data_gathering module
 
 **1. build_payload(item_ids, item_type, bundle_type, aoi_coordinates)** 
@@ -221,3 +228,5 @@
 > - dir_raster: The directory or the file of planet images
 > - dir_model: The directory where the model is stored
 > - dir_out: The directory where the output snow cover image will be stored
+>
+>*Outputs:* N/A
