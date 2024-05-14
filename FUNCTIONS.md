@@ -6,30 +6,49 @@
 >*Description:* Builds Payload to send to Planet
 >
 >*Parameters:*
-   - item_ids: Item ID from Planet
-   - item_type: Item Type from the Planet Catalog, ex: PSScene OR REOrthoTile [More Info](https://developers.planet.com/docs/apis/data/items-assets/)
-   - bundle_type: Product Bundle from Planet
-   - aoi_coordinates: Area of Interest Coordinates
+>   - item_ids: Item ID from Planet
+>   - item_type: Item Type from the Planet Catalog, ex: PSScene OR REOrthoTile [More Info](https://developers.planet.com/docs/apis/data/items-assets/)
+>   - bundle_type: Product Bundle from Planet
+>   - aoi_coordinates: Area of Interest Coordinates
 >
 >*Outputs:* Payload
 
+**2. order_now(payload,apiKey)**
+>*Description:* Order using Payload from Planet
+>
+>*Parameters:*
+>  - payload: Payload to send to Planet
+>  - apiKey: Your Personal API Key from Planet [More Info](https://developers.planet.com/quickstart/apis/)
+>
+>*Outputs:* Returns Planet Order Link
 
-**order_now(payload,apiKey)**: Order using Payload from Planet
-   - payload: Payload to send to Planet
-   - apiKey: Your Personal API Key from Planet [More Info](https://developers.planet.com/quickstart/apis/)
-   - 
+**3. download_results(order_url, folder, apiKey, overwrite=False)**
+>*Description:* Download results from Planet using an order_url
+>
+>*Parameters:*
+>  - order_url: order_Urls from Function submit_orders
+>  - folder: Output folder
+>  - apiKey: Your Personal API Key from Planet [More Info](https://developers.planet.com/quickstart/apis/)
+>
+>*Outputs:* N/A
 
-3. download_results(order_url, folder, apiKey, overwrite=False): Download results from Planet using an order_url
-   - order_url: order_Urls from Function submit_orders
-   - folder: Output folder
-   - apiKey: Your Personal API Key from Planet [More Info](https://developers.planet.com/quickstart/apis/)
+**4. domain_shape()** 
+>*Description:* Returns the shape of the domain array
+>
+>*Parameters:* N/A
+>
+>*Outputs:* Shape of domain array
 
-4. domain_shape(): Returns the shape of the domain array
+**5. api_search(item_type, apiKey)** 
+>*Description:* Searches for API Key
+>
+>*Parameters:*
+>  - item_type: Item Type from the Planet Catalog, ex: PSScene OR REOrthoTile [More Info](https://developers.planet.com/docs/apis/data/items-assets/)
+>  - apiKey: Your Personal API Key from Planet [More Info](https://developers.planet.com/quickstart/apis/)
+>
+>*Outputs:* Result
 
-5. api_search(item_type, apiKey): Searches for API Key
-   - item_type: Item Type from the Planet Catalog, ex: PSScene OR REOrthoTile [More Info](https://developers.planet.com/docs/apis/data/items-assets/)
-   - apiKey: Your Personal API Key from Planet [More Info](https://developers.planet.com/quickstart/apis/)
-     
+
 7. downloadable_PlanetIDs(result, domain_geometry)
     - result: Result Output from api_search Function
     - domain_geometry: Domain_geometry Output from domain_shape Function
