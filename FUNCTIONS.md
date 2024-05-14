@@ -1,13 +1,13 @@
 ## Functions
 
 ### Table of Contents
-1. [data_gathering module](###data_gatheringmodule)
-2. [data_preparation](###data_preparationmodule)
+1. [data_gathering module](#data_gathering)
+2. [data_preparation](###data_preparation_module)
 3. [Third Example](#third-example)
 4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
 
 
-### data_gathering module
+### data_gathering module <a name="data_gathering"></a>
 
 **1. build_payload(item_ids, item_type, bundle_type, aoi_coordinates)** 
 >*Description:* Builds Payload to send to Planet
