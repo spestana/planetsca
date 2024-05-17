@@ -50,7 +50,7 @@ repos:
     rev: v2.2.6
     hooks:
       - id: codespell
-        # Checks spelling in `docs/source` and `gnatss` dirs ONLY
+        # Checks spelling in `docs/source` dirs ONLY
         # Ignores `.ipynb` files and `_build` folders
         args: ["--skip=*.ipynb,docs/_build"]
 
