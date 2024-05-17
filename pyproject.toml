@@ -42,6 +42,7 @@ packages = ["src/planetsca"]
 [tool.hatch.build.targets.sdist]
 exclude = [
   "/tests",
+  "/code_archive"
 ]
 
 [tool.ruff]
