@@ -7,6 +7,8 @@ Originally modeled from Kehan Yang:
 
 [TestPyPi](https://test.pypi.org/project/PyPlanetSCA/#description)
 
+[Pre-Trained Model](https://huggingface.co/IanChiu333/PyPlanetSCA_Library)
+
 #### Table of Contents <a name="table_of_contents"></a>
 1. [Installation](#installation)
 2. [Running the Code](#running)
