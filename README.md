@@ -9,6 +9,8 @@ Originally modeled from Kehan Yang:
 
 [Pre-Trained Model](https://huggingface.co/IanChiu333/PyPlanetSCA_Library)
 
+This requires you to have an account with Planet and an [API key](https://developers.planet.com/quickstart/apis/#find-your-api-key) for data access.
+
 #### Table of Contents <a name="table_of_contents"></a>
 
 1. [Installation](#installation)
