@@ -9,17 +9,23 @@ from sklearn.model_selection import RepeatedStratifiedKFold, cross_val_score
 
 warnings.filterwarnings("ignore")
 
-# Idea for testing - call function in the script
-# One end function that uses everything as helper methods - just the run model on image and can control everything through that function
-
 
 def train_model(
-    dir_model, dir_score, n_estimators, max_depth, max_features, random_state, df_train
+    dir_model,
+    dir_score,
+    n_estimators,
+    max_depth,
+    max_features,
+    random_state,
+    n_splits,
+    n_repeats,
+    df_train,
 ):  # Allowing for model parameter changing in function
+    flag_train = False  # noqa
+
     # get data
     # dir_model = 'random_forest_20240116_binary_174K.joblib'
     # dir_score = 'random_forest_20240116_binary_174K_scores.csv'
-
     starttime = time.process_time()
     if True:
         X = df_train[["blue", "green", "red", "nir"]]
@@ -29,15 +35,17 @@ def train_model(
         # X[X['ndvi']< -1.0]['ndvi'] = -1.0
         # X[X['ndvi']> 1.0]['ndvi'] = 1.0
         # X[np.isfinite(X['ndvi']) == False]['ndvi'] = np.nan
-
         # define the model
         model = RandomForestClassifier(
-            n_estimators, max_depth, max_features, random_state
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            max_features=max_features,
+            random_state=random_state,
         )
         # evaluate the model
         cv = RepeatedStratifiedKFold(
-            n_splits=10, n_repeats=1, random_state=1
-        )  # Could parametize this as well
+            n_splits=n_splits, n_repeats=n_repeats, random_state=random_state
+        )
         n_accuracy = cross_val_score(
             model, X, y, scoring="accuracy", cv=cv, n_jobs=-1, error_score="raise"
         )
@@ -53,7 +61,6 @@ def train_model(
             n_jobs=-1,
             error_score="raise",
         )
-
         # report performance
         plt.hist(n_f1)
         print("Repeat times:".format(), len(n_f1))

@@ -5,15 +5,12 @@ build-backend = "hatchling.build"
 [project]
 name = "PyPlanetSCA"
 version = "0.3.4.0"
-
-[project.metadata]
 description = "Mapping snow covered areas (SCA) from high-resolution PlanetScope images using Random Forest model"
 authors = [
     { name = "Ian Chiu", email = "ianchiu333@gmail.com" }
 ]
 
 requires-python = ">=3.8"
-license = "MIT"
 dependencies = [
     "dvc>=2.10.0",
     "hydra-core>=1.1.1",
@@ -29,10 +26,14 @@ dependencies = [
     "shapely"
 ]
 
+[project.license]
+file = "LICENSE"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=6.2.5",
     "pre-commit>=2.17.0",
+    "nox"
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -41,12 +42,10 @@ packages = ["src/planetsca"]
 [tool.hatch.build.targets.sdist]
 exclude = [
   "/tests",
+  "/code_archive"
 ]
 
 [tool.ruff]
-ignore = ["E501"]
-select = ["B","C","E","F","W","B9", "I", "Q"]
-
 # Exclude a variety of commonly ignored directories.
 exclude = [
     ".bzr",
@@ -75,5 +74,6 @@ exclude = [
 # Same as Black.
 line-length = 88
 
-[tool.ruff.mccabe]
-max-complexity = 10
+[tool.ruff.lint]
+ignore = ["E501"]
+select = ["B","C","E","F","W","B9", "I", "Q"]
