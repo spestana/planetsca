@@ -9,6 +9,8 @@ Originally modeled from Kehan Yang:
 
 [Pre-Trained Model](https://huggingface.co/IanChiu333/PyPlanetSCA_Library)
 
+![PyPlanetSCA](additional_assets/PyPlanetSCA_Image.png)
+
 #### Table of Contents <a name="table_of_contents"></a>
 
 1. [Installation](#installation)
