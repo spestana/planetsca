@@ -5,12 +5,6 @@ build-backend = "hatchling.build"
 [project]
 name = "PyPlanetSCA"
 version = "0.3.4.0"
-description = "Mapping snow covered areas (SCA) from high-resolution PlanetScope images using Random Forest model"
-authors = [
-    { name = "Ian Chiu", email = "ianchiu333@gmail.com" }
-]
-
-requires-python = ">=3.8"
 dependencies = [
     "dvc>=2.10.0",
     "hydra-core>=1.1.1",
@@ -25,9 +19,14 @@ dependencies = [
     "requests",
     "shapely"
 ]
+requires-python = ">=3.8"
+authors = [
+    { name = "Ian Chiu", email = "ianchiu333@gmail.com" }
+]
+description = "Mapping snow covered areas (SCA) from high-resolution PlanetScope images using Random Forest model"
+readme = "README.md"
+license = {file = "LICENSE"}
 
-[project.license]
-file = "LICENSE"
 
 [project.optional-dependencies]
 dev = [
@@ -36,13 +35,19 @@ dev = [
     "nox"
 ]
 
+[project.urls]
+Homepage = "https://test.pypi.org/project/PyPlanetSCA/#description"
+Repository = "https://github.com/DSHydro/PyPlanetSCA-Python-Library"
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/planetsca"]
 
 [tool.hatch.build.targets.sdist]
 exclude = [
   "/tests",
-  "/code_archive"
+  "/code_archive",
+  "/demo",
+  "/additional_assets"
 ]
 
 [tool.ruff]
