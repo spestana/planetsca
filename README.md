@@ -90,6 +90,8 @@ dir_score = 'random_forest_20240116_binary_174K_scores.csv'
 mt.train_model(dir_model, dir_score, 10, 10, 4, 1, df_train)
 ```
 
+OR
+
 5b. Retrieve Pre-Made Model from Hugging Faces
 
 ```
