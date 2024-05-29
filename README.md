@@ -64,7 +64,7 @@ bundle_type = "analytic_sr_udm2"
 ```
 
 # data download location
-out_direc = '/Users/ianch/PyPlanetSCAPythonLibrary/Test_Files/'
+out_direc = '_________' #Replace with folder containing environment
 domain_geometry = dg.domain_shape()
 print(domain_geometry)
 result = dg.api_search(item_type, apiKey)
@@ -84,13 +84,19 @@ dir_model = 'random_forest_20240116_binary_174K.joblib'
 dir_score = 'random_forest_20240116_binary_174K_scores.csv'
 ```
 
-5. Model Training
+5a. Model Training
 
 ```
 mt.train_model(dir_model, dir_score, 10, 10, 4, 1, df_train)
 ```
 
-7. Prediction Evaluation
+5b. Retrieve Pre-Made Model from Hugging Faces
+
+```
+mt.retrieve_model(out_direc):
+```
+
+6. Prediction Evaluation
 
 ```
 dir_raster = '20180528_181110_1025_3B_AnalyticMS_SR_clip.tiff'
