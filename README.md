@@ -32,12 +32,6 @@ data access.
 pip install -i https://test.pypi.org/simple/ PyPlanetSCA
 ```
 
-2. Install package dependencies in requirements.txt:
-
-```bash
-pip install -r requirements.txt
-```
-
 <br></br>
 
 ## Running the code <a name="running"></a>
