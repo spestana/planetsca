@@ -142,7 +142,9 @@ def download_results(order_url, folder, apiKey, overwrite=False):
             request_fufilled = False
         # Data isn't ready yet, need to code in functionality to rerun the download when data is ready
         except Exception:
-            print("data not ready yet, Try number: " + counter)
+            print("data not ready yet, this was attempt number {}".format(counter))
+            print("will automatically try again in 60 seconds")
+            counter += 1
         r.close()
         time.sleep(60)
     # except Exception as e:
