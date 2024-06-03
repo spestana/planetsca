@@ -54,5 +54,4 @@ jobs:
 
       - name: Test package
         run: >-
-          python -m pytest -ra --cov --cov-report=xml --cov-report=term
-          --durations=20
+          python -m pytest -ra
