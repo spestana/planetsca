@@ -2,7 +2,7 @@ from shapely.geometry import shape
 
 
 def make_domain_geometry_from_bounds(bounds: list[float]):
-    '''
+    """
     Make a shapely geometry polygon from from longitude and latitude bounds (a rectangular area)
 
     Parameters
@@ -15,7 +15,7 @@ def make_domain_geometry_from_bounds(bounds: list[float]):
             a geojson-like dictionary
         domain_geometry: shapely.geometry.polygon.Polygon
             shaply geometry polygon defined by these bounds
-    '''
+    """
 
     [minLon, minLat, maxLon, maxLat] = bounds
     
@@ -39,7 +39,7 @@ def make_domain_geometry_from_bounds(bounds: list[float]):
     return geo_json_geometry, domain_geometry
 
 def make_geometry_filter_from_bounds(bounds: list[float]) -> dict:
-    '''
+    """
     Make a geometry filter dictionary for the Planet API from longitude and latitude bounds (a rectangular search area)
 
     Parameters
@@ -52,7 +52,7 @@ def make_geometry_filter_from_bounds(bounds: list[float]) -> dict:
             dictionary geometry filter for the Planet API
         geometry: shapely.geometry.polygon.Polygon
             shaply geometry polygon defined by these bounds
-    '''
+    """
        
     # create a geojson-like geometry dictionary
     geo_json_geometry, _ = make_domain_geometry_from_bounds(bounds)
@@ -67,7 +67,7 @@ def make_geometry_filter_from_bounds(bounds: list[float]) -> dict:
     return geometry_filter
 
 def make_date_range_filter(start_date: str, end_date: str) -> dict:
-    '''
+    """
     Make a date range filter dictionary for the Planet API
     
     Parameters
@@ -80,7 +80,7 @@ def make_date_range_filter(start_date: str, end_date: str) -> dict:
     -------
         date_range_filter: dict
             dictionary date range filter for the Planet API
-    '''   
+    """
     # filter images acquired in a certain date range
     date_range_filter = {
         "type": "DateRangeFilter",
@@ -91,7 +91,7 @@ def make_date_range_filter(start_date: str, end_date: str) -> dict:
     return date_range_filter
 
 def make_cloud_cover_filter(lte: float, gte: float = 0) -> dict:
-    '''
+    """
     Make a cloud cover filter dictionary for the Planet API
     
     Parameters
@@ -104,7 +104,7 @@ def make_cloud_cover_filter(lte: float, gte: float = 0) -> dict:
     -------
         cloud_cover_filter: dict
             dictionary cloud cover filter for the Planet API
-    '''
+    """
     
     cloud_cover_filter = {
         "type": "RangeFilter",
@@ -116,7 +116,7 @@ def make_cloud_cover_filter(lte: float, gte: float = 0) -> dict:
 
 
 def make_AndFilter(filters: list[dict]) -> dict:
-    '''
+    """
     Make a filter by combining two or more filters with an AND operator
 
     Parameters
@@ -127,7 +127,7 @@ def make_AndFilter(filters: list[dict]) -> dict:
     -------
         filter: dict
             combined filters for the Planet API
-    '''
+    """
 
     filter = {
         "type": "AndFilter",
@@ -136,7 +136,7 @@ def make_AndFilter(filters: list[dict]) -> dict:
     return filter
 
 def make_OrFilter(filters: list[dict]) -> dict:
-    '''
+    """
     Make a filter by combining two or more filters with an OR operator
 
     Parameters
@@ -147,7 +147,7 @@ def make_OrFilter(filters: list[dict]) -> dict:
     -------
         filter: dict
             combined filters for the Planet API
-    '''
+    """
 
     filter = {
         "type": "OrFilter",

@@ -163,7 +163,7 @@ def domain_shape():
 
 
 def api_search(item_type, filter, apiKey):
-    '''
+    """
     Submit a quick search request to the Planet API
     
     Parameters
@@ -179,7 +179,7 @@ def api_search(item_type, filter, apiKey):
         result: requests.models.Response
             response from the Planet API
     
-    '''
+    """
     search_endpoint_request = {"item_types": [item_type], "filter": filter}
     result = requests.post(
         "https://api.planet.com/data/v1/quick-search",
