@@ -9,15 +9,19 @@ import rasterio
 
 def run_sca_prediction(dir_raster, dir_out, nodata_flag, model):
     """
-    This function predicts binary snow cover for planet satellite images using
-    the pre-trained random forest model
+    This function predicts binary snow cover for planet satellite images using the pre-trained random forest model
 
-    :param dir_raster: the directory or the file of planet images
-    :param dir_out: the directory where output snow cover images will be stored
-    :param nodata_flag: the value used to represent no data in the predicted snow cover image
-    default value is 9.
-    model: the model used to predict snow cover
-
+    Parameters
+    ----------
+        dir_raster: string
+            the directory or the file of planet images
+        dir_out: string
+            the directory where output snow cover images will be stored
+        nodata_flag: int, default=9
+            the value used to represent no data in the predicted snow cover image, default value is 9
+        model: 
+            the model used to predict snow cover
+    
     """
     # if output directory not exist then creat the output directory
     if not os.path.exists(dir_out):
