@@ -26,13 +26,39 @@ data access.
 
 ## Installation <a name="installation"></a>
 
-1. To install the python package, use:
+To install the python package, use:
 
 ```bash
 pip install -i https://test.pypi.org/simple/ PyPlanetSCA
 ```
 
-<br></br>
+## Development
+
+1. Clone the repository
+
+   ```bash
+   git clone https://github.com/DSHydro/PyPlanetSCA-Python-Library.git
+   ```
+
+2. Go to the repository
+
+   ```bash
+   cd PyPlanetSCA-Python-Library
+   ```
+
+3. Install the package
+
+   ```bash
+   pip install -e ".[dev]"
+   ```
+
+4. Setup pre-commit
+
+   ```bash
+   pre-commit install
+   ```
+
+5. Now you are ready to use and develop the package!
 
 ## Running the code <a name="running"></a>
 
