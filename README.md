@@ -2,12 +2,16 @@
 
 ### This is a python library for mapping snow covered areas (SCA) from high-resolution PlanetScope images using a Random Forest model.
 
-Originally modeled from Kehan Yang: 
-[Kehan's Project](https://github.com/KehanGit/High_resolution_snow_cover_mapping/blob/main/01_download_planetscope_images.ipynb) 
+Originally modeled from Kehan Yang:
+[Kehan's Project](https://github.com/KehanGit/High_resolution_snow_cover_mapping/blob/main/01_download_planetscope_images.ipynb)
 
 [TestPyPi](https://test.pypi.org/project/PyPlanetSCA/#description)
 
 [Pre-Trained Model](https://huggingface.co/IanChiu333/PyPlanetSCA_Library)
+
+This requires you to have an account with Planet and an
+[API key](https://developers.planet.com/quickstart/apis/#find-your-api-key) for
+data access.
 
 ![PyPlanetSCA](https://raw.githubusercontent.com/DSHydro/PyPlanetSCA-Python-Library/main/additional_assets/PyPlanetSCA_Image.png)
 
@@ -22,19 +26,39 @@ Originally modeled from Kehan Yang:
 
 ## Installation <a name="installation"></a>
 
-1. To install the python package, use:
+To install the python package, use:
 
 ```bash
 pip install -i https://test.pypi.org/simple/ PyPlanetSCA
 ```
 
-2. Install package dependencies in requirements.txt:
+## Development
 
-```bash
-pip install -r requirements.txt
-```
+1. Clone the repository
 
-<br></br>
+   ```bash
+   git clone https://github.com/DSHydro/PyPlanetSCA-Python-Library.git
+   ```
+
+2. Go to the repository
+
+   ```bash
+   cd PyPlanetSCA-Python-Library
+   ```
+
+3. Install the package
+
+   ```bash
+   pip install -e ".[dev]"
+   ```
+
+4. Setup pre-commit
+
+   ```bash
+   pre-commit install
+   ```
+
+5. Now you are ready to use and develop the package!
 
 ## Running the code <a name="running"></a>
 

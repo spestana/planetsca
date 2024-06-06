@@ -10,6 +10,7 @@ description = "Mapping snow covered areas (SCA) from high-resolution PlanetScope
 dependencies = [
     "dvc>=2.10.0",
     "hydra-core>=1.1.1",
+    "huggingface-hub >= 0.23.2",
     "pdoc3>=0.10.0",
     "numpy",
     "pandas",

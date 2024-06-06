@@ -4,9 +4,9 @@ import warnings
 import joblib
 import matplotlib.pyplot as plt
 import pandas as pd
+from huggingface_hub import hf_hub_download
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RepeatedStratifiedKFold, cross_val_score
-from huggingface_hub import hf_hub_download 
 
 warnings.filterwarnings("ignore")
 
@@ -85,5 +85,10 @@ def train_model(
 
         print("Total time used:".format(), round(time.process_time() - starttime, 1))
 
+
 def retrieve_model(out_direc):
-    hf_hub_download(repo_id="IanChiu333/PyPlanetSCA_Libarary", filename="random_forest_20220513_binary_174K.joblib", local_dir=out_direc)
+    hf_hub_download(
+        repo_id="IanChiu333/PyPlanetSCA_Libarary",
+        filename="random_forest_20220513_binary_174K.joblib",
+        local_dir=out_direc,
+    )
