@@ -91,3 +91,6 @@ target/
 
 # Hydra logs
 outputs
+
+# Local Package
+version.py
