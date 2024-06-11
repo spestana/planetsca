@@ -37,13 +37,13 @@ pip install -i https://test.pypi.org/simple/ PyPlanetSCA
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/DSHydro/PyPlanetSCA-Python-Library.git
+   git clone https://github.com/DSHydro/planetsca.git
    ```
 
 2. Go to the repository
 
    ```bash
-   cd PyPlanetSCA-Python-Library
+   cd planetsca
    ```
 
 3. Install the package
