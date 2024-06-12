@@ -1,13 +1,15 @@
-# PyPlanetSCA Python Library
+# PlanetSCA Python Library
 
 ### This is a python library for mapping snow covered areas (SCA) from high-resolution PlanetScope images using a Random Forest model.
 
 Originally modeled from Kehan Yang:
 [Kehan's Project](https://github.com/KehanGit/High_resolution_snow_cover_mapping/blob/main/01_download_planetscope_images.ipynb)
 
-[TestPyPi](https://test.pypi.org/project/PyPlanetSCA/#description)
+[TestPyPi](https://test.pypi.org/project/planetsca/)
 
-[Pre-Trained Model](https://huggingface.co/IanChiu333/PyPlanetSCA_Library)
+[Pre-Trained Model](https://huggingface.co/geo-smart/planetsca_models)
+
+[Sample Data](https://huggingface.co/datasets/geo-smart/planetsca_datasets)
 
 This requires you to have an account with Planet and an
 [API key](https://developers.planet.com/quickstart/apis/#find-your-api-key) for
@@ -29,7 +31,7 @@ data access.
 To install the python package, use:
 
 ```bash
-pip install -i https://test.pypi.org/simple/ PyPlanetSCA
+pip install -i https://test.pypi.org/simple/ planetsca
 ```
 
 ## Development
@@ -37,13 +39,13 @@ pip install -i https://test.pypi.org/simple/ PyPlanetSCA
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/DSHydro/PyPlanetSCA-Python-Library.git
+   git clone https://github.com/DSHydro/planetsca.git
    ```
 
 2. Go to the repository
 
    ```bash
-   cd PyPlanetSCA-Python-Library
+   cd planetsca
    ```
 
 3. Install the package
@@ -133,7 +135,7 @@ pe.single_image_evaluation(dir_raster, dir_model, dir_out)
 ## Functions <a name="functions"></a>
 
 Please see the FUNCTIONS.md file for additional documentation of functions:
-[FUNCTIONS.md](https://github.com/DSHydro/PyPlanetSCA-Python-Library/blob/main/FUNCTIONS.md)
+[FUNCTIONS.md](https://github.com/DSHydro/planetsca/blob/main/FUNCTIONS.md)
 
 <br></br>
 

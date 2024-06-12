@@ -12,6 +12,7 @@ import requests
 from rasterio.plot import show
 from requests.auth import HTTPBasicAuth
 from shapely.geometry import shape
+from huggingface_hub import hf_hub_download
 
 headers = {"Content-Type": "application/json"}
 
@@ -260,3 +261,10 @@ def download_orders(order_urls, out_direc, apiKey):
 def display_image(fp):
     img = rasterio.open(fp)
     show(img)
+
+def retrieve_model(out_direc, file):
+    hf_hub_download(
+        repo_id="geo-smart/planetsca_models",
+        filename=file,
+        local_dir=out_direc,
+    )

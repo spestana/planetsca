@@ -86,9 +86,9 @@ def train_model(
         print("Total time used:".format(), round(time.process_time() - starttime, 1))
 
 
-def retrieve_model(out_direc):
+def retrieve_model(out_direc, file):
     hf_hub_download(
-        repo_id="IanChiu333/PyPlanetSCA_Libarary",
-        filename="random_forest_20220513_binary_174K.joblib",
+        repo_id="geo-smart/planetsca_datasets",
+        filename=file,
         local_dir=out_direc,
     )
