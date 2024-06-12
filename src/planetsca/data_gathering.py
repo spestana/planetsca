@@ -143,7 +143,9 @@ def download_results(order_url, folder, apiKey, overwrite=False):
             request_fufilled = False
         # Data isn't ready yet, need to code in functionality to rerun the download when data is ready
         except Exception:
-            print("data not ready yet, Try number: " + counter)
+            print("data not ready yet, this was attempt number {}".format(counter))
+            print("will automatically try again in 60 seconds")
+            counter += 1
         r.close()
         time.sleep(60)
     # except Exception as e:
@@ -161,8 +163,25 @@ def domain_shape():
     return domain_geometry
 
 
-def api_search(item_type, apiKey):
-    search_endpoint_request = {"item_types": [item_type], "filter": domain}
+def api_search(item_type, filter, apiKey):
+    """
+    Submit a quick search request to the Planet API
+
+    Parameters
+    ----------
+        item_type: string
+            name of a Planet item type, https://developers.planet.com/docs/apis/data/items-assets/#item-types
+        filter: dict
+            dictionary of one or more filters, https://developers.planet.com/docs/apis/data/searches-filtering/#field-filters
+        apiKey: string
+            your Planet API key, https://developers.planet.com/quickstart/apis/#find-your-api-key
+    Returns
+    -------
+        result: requests.models.Response
+            response from the Planet API
+
+    """
+    search_endpoint_request = {"item_types": [item_type], "filter": filter}
     result = requests.post(
         "https://api.planet.com/data/v1/quick-search",
         auth=HTTPBasicAuth(apiKey, ""),
