@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
 name = "planetsca"
-version = "0.3.4.3"
+dynamic = ["version"]
 readme = "README.md"
 description = "Mapping snow covered areas (SCA) from high-resolution PlanetScope images using Random Forest model"
 dependencies = [
@@ -51,6 +51,15 @@ exclude = [
   "/demo",
   "/additional_assets"
 ]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/planetsca/version.py"
+
+[tool.hatch.version.raw-options]
+local_scheme = "no-local-version"
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
