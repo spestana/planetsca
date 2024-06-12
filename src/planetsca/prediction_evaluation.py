@@ -19,9 +19,9 @@ def run_sca_prediction(dir_raster, dir_out, nodata_flag, model):
             the directory where output snow cover images will be stored
         nodata_flag: int, default=9
             the value used to represent no data in the predicted snow cover image, default value is 9
-        model: 
+        model:
             the model used to predict snow cover
-    
+
     """
     # if output directory not exist then creat the output directory
     if not os.path.exists(dir_out):
