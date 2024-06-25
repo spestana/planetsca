@@ -8,7 +8,6 @@ dynamic = ["version"]
 readme = "README.md"
 description = "Mapping snow covered areas (SCA) from high-resolution PlanetScope images using Random Forest model"
 dependencies = [
-    "python>=3.8",
     "dvc>=2.10.0",
     "hydra-core>=1.1.1",
     "huggingface-hub >= 0.23.2",
