@@ -15,7 +15,7 @@ dependencies = [
     "numpy",
     "pandas",
     "scikit-learn",
-    "geopandas",
+    "geopandas>=1.0.0",
     "rasterio",
     "matplotlib",
     "joblib>=1.3.2",
