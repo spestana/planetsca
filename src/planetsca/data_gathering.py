@@ -180,6 +180,15 @@ def api_search(item_type, filter, apiKey):
             response from the Planet API
 
     """
+    #Checks if apiKey is empty and if it valid
+    if apiKey == "" or not isinstance(apiKey, str):
+        raise ValueError("Must input an API Key(API parameter is either empty or is not a string)")
+    
+    auth = HTTPBasicAuth(apiKey, '')
+    response = str(requests.get("https://api.planet.com/subscriptions/v1", auth=auth))
+    if "401" in response:
+        raise ValueError("Your APIKey is invalid or incorrect. Check here for Planet's guide to API Keys: https://developers.planet.com/docs/subscriptions/api-mechanics/")
+
     search_endpoint_request = {"item_types": [item_type], "filter": filter}
     result = requests.post(
         "https://api.planet.com/data/v1/quick-search",
