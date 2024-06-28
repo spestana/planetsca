@@ -72,10 +72,10 @@ def data_training_new(dir_ROI: str, dir_raster: str, dir_ROIraster: str, dir_sam
     Creates training data from scratch
 
     Parameters:
-    - dir_ROI:
-    - dir_raster:
-    - dir_ROIraster:
-    - dir_samples_root: 
+    - dir_ROI: Directory path to regions of interest
+    - dir_raster: Directory to Planet image for training
+    - dir_ROIraster: Directory path to a ROI converted to shape mask
+    - dir_samples_root: Directory path to csv of training data extracted from images 
 
     Returns:
     - DataFrame: DataFrame of training data
