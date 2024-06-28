@@ -28,7 +28,7 @@ data access.
 
 ## Installation <a name="installation"></a>
 
-To install the python package, use:
+To install the python package(Ensure Python is downloaded, check bottom of README for VENV instructions), use:
 
 ```bash
 pip install -i https://test.pypi.org/simple/ planetsca
@@ -147,7 +147,7 @@ Please see the FUNCTIONS.md file for additional documentation of functions:
 
 1. Open Command Palette (Ctrl + Shift + P)
 2. Select Venv
-3. Select Desired Interpreter Path (I use 3.12.2)
+3. Select Desired Interpreter Path (I use 3.12.2, minimum version is 3.8)
 4. Notification should show up on the bottom right corner titled "Creating
    environment (Show logs): Creating venv...
 5. The venv is set up and activated if you see " _Python Version_
