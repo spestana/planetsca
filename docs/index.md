@@ -4,7 +4,7 @@
 :hidden:
 :caption: API
 
-api/<package-name-here>
+api/PlanetSCA
 ```
 
 ```{include} ../README.md
