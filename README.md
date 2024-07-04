@@ -31,7 +31,7 @@ data access.
 To install the python package, use(Ensure Python is downloaded, check bottom of README for VENV instructions):
 
 ```bash
-pip install -i https://test.pypi.org/simple/ planetsca
+pip install --extra-index-url https://test.pypi.org/simple planetsca
 ```
 
 ## Development
