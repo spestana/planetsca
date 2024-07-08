@@ -4,6 +4,7 @@ import pathlib
 import subprocess
 import time
 
+import geopandas as gpd
 import numpy as np
 import pandas as pd
 import rasterio
@@ -12,7 +13,6 @@ from huggingface_hub import hf_hub_download
 from rasterio.plot import show
 from requests.auth import HTTPBasicAuth
 from shapely.geometry import shape
-import geopandas as gpd
 
 headers = {"Content-Type": "application/json"}
 
