@@ -39,13 +39,13 @@ def get_coordinates(file_path: str) -> list:
 
 def vertex_count(file_path: str) -> int:
     """
-    Counts vertexes from a GeoJSON file.
+    Counts vertices from a GeoJSON file.
 
     Parameters:
     - file_path: The path to the GeoJSON file.
 
     Returns:
-    - int: Number of vertexes in geojson file
+    - int: Number of vertices in geojson file
     """
     return len(get_coordinates(file_path)) - 1
 
