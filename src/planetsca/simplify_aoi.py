@@ -220,7 +220,6 @@ def fix_clipping(file_path: str, AOI_Coordinates: list):
     - file_path: The path to the GeoJSON file
     - AOI_Coordinates: List of coordinates representing the AOI bounds
     """
-
     first_array = AOI_Coordinates[0]
     last_array = AOI_Coordinates[-1]
 

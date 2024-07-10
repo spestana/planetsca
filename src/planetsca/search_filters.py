@@ -83,6 +83,7 @@ def make_date_range_filter(start_date: str, end_date: str) -> dict:
         date_range_filter: dict
             dictionary date range filter for the Planet API
     """
+
     # filter images acquired in a certain date range
     date_range_filter = {
         "type": "DateRangeFilter",

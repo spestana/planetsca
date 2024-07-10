@@ -179,8 +179,8 @@ def api_search(item_type, filter, apiKey):
     -------
         result: requests.models.Response
             response from the Planet API
-
     """
+
     # Checks if apiKey is empty and if it valid
     if apiKey == "" or not isinstance(apiKey, str):
         raise ValueError(
