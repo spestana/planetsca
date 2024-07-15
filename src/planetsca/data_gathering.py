@@ -1,76 +1,27 @@
-import json
+#Imports
 import os
-import pathlib
-import subprocess
-import time
-
-import geopandas as gpd
-import numpy as np
-import pandas as pd
-import rasterio
 import requests
-from huggingface_hub import hf_hub_download
-from rasterio.plot import show
+import geopandas as gpd
 from requests.auth import HTTPBasicAuth
 from shapely.geometry import shape
+import numpy as np
+import subprocess
+import json
+import pathlib
+import pandas as pd
+import time
+import rasterio
+from rasterio.plot import show
+import importlib
+from huggingface_hub import hf_hub_download
+headers = {'Content-Type': 'application/json'}
 
-headers = {"Content-Type": "application/json"}
-
-# ---------------------------- geojson_551.py
-geo_json_geometry = {
-    "type": "Polygon",
-    "coordinates": [
-        [
-            [-105.88556387570844, 40.51902315502832],
-            [-105.87210147791147, 40.51902315502832],
-            [-105.87210147791147, 40.52888545899697],
-            [-105.88556387570844, 40.52888545899697],
-            [-105.88556387570844, 40.51902315502832],
-        ]
-    ],
-}
-
-# filter for items the overlap with our chosen geometry
-geometry_filter = {
-    "type": "GeometryFilter",
-    "field_name": "geometry",
-    "config": geo_json_geometry,
-}
-
-# filter images acquired in a certain date range
-date_range_filter = {
-    "type": "DateRangeFilter",
-    "field_name": "acquired",
-    "config": {"gte": "2023-07-25T00:00:00.000Z", "lte": "2023-09-01T00:00:00.000Z"},
-}
-
-# filter any images which are more than 50% clouds
-cloud_cover_filter = {
-    "type": "RangeFilter",
-    "field_name": "cloud_cover",
-    "config": {"lte": 0.05},
-}
-
-# create a filter that combines our geo and date filters
-# could also use an "OrFilter"
-# domain = {
-#  "type": "AndFilter",
-#  "config": [geometry_filter, date_range_filter]
-# }
-
-# create a filter that combines our geo and date filters
-# could also use an "OrFilter"
-domain = {
-    "type": "AndFilter",
-    "config": [geometry_filter, date_range_filter, cloud_cover_filter],
-}
-
-# ----------------------------
-
-
-# ---------------------------- Pre-built functions
-
-
+############ FUNCTIONS. DON'T CHANGE THESE!!! #########
+#Helper Functions
+def read_geojson(file_name):
+    file = importlib.import_module(file_name)
+    return file.domain
+    
 def build_payload(item_ids, item_type, bundle_type, aoi_coordinates):
     payload = {
         "name": item_ids[0],
@@ -79,42 +30,40 @@ def build_payload(item_ids, item_type, bundle_type, aoi_coordinates):
             {
                 "item_ids": item_ids,
                 "item_type": item_type,
-                "product_bundle": bundle_type,
+                "product_bundle": bundle_type
             }
         ],
         "tools": [
-            {"clip": {"aoi": {"type": "Polygon", "coordinates": aoi_coordinates}}}
-        ],
+            {
+                "clip": {
+                    "aoi": {
+                        "type": "Polygon",
+                        "coordinates": aoi_coordinates
+                    }
+                }
+            }
+        ]
     }
     return payload
 
-
-def order_now(payload, apiKey):
-    orders_url = "https://api.planet.com/compute/ops/orders/v2"
-    response = requests.post(
-        orders_url,
-        data=json.dumps(payload),
-        auth=HTTPBasicAuth(apiKey, ""),
-        headers=headers,
-    )
+def order_now(payload,apiKey):
+    orders_url = 'https://api.planet.com/compute/ops/orders/v2'
+    response = requests.post(orders_url, data=json.dumps(payload), auth=HTTPBasicAuth(apiKey, ''), headers=headers)
     print(response)
 
-    if response.status_code == 202:
-        order_id = response.json()["id"]
+    if response.status_code==202:
+        order_id =response.json()['id']
         url = f"https://api.planet.com/compute/ops/orders/v2/{order_id}"
         # feature_check = requests.get(url, auth=(PLANET_API_KEY, ""))
-        feature_check = requests.get(url, auth=HTTPBasicAuth(apiKey, ""))
-        if feature_check.status_code == 200:
-            print(
-                f"Submitted a total of {len(feature_check.json()['products'][0]['item_ids'])} image ids: accepted a total of {len(feature_check.json()['products'][0]['item_ids'])} ids"
-            )
+        feature_check = requests.get(url, auth=HTTPBasicAuth(apiKey, ''))
+        if feature_check.status_code==200:
+            print(f"Submitted a total of {len(feature_check.json()['products'][0]['item_ids'])} image ids: accepted a total of {len(feature_check.json()['products'][0]['item_ids'])} ids")
             print(f"Order URL: https://api.planet.com/compute/ops/orders/v2/{order_id}")
             return f"https://api.planet.com/compute/ops/orders/v2/{order_id}"
     else:
-        print(f"Failed with Exception code : {response.status_code}")
-
-
-def download_results(order_url, folder, apiKey, overwrite=False):
+        print(f'Failed with Exception code : {response.status_code}')
+        
+def download_results(order_url, apiKey, folder, overwrite=False):
     print("Attempting to download")  # Tell user what to do
     request_fufilled = True
     counter = 1
@@ -148,6 +97,7 @@ def download_results(order_url, folder, apiKey, overwrite=False):
             counter += 1
         r.close()
         time.sleep(60)
+    print("Completed downloads")
     # except Exception as e:
     #     print(e)
     #     print(order_url)
@@ -155,149 +105,83 @@ def download_results(order_url, folder, apiKey, overwrite=False):
     # r.close()
 
 
-# -----------------------------------
-
-
-def domain_shape():
-    domain_geometry = shape(domain["config"][0]["config"])
-    return domain_geometry
-
-
-def api_search(item_type, filter, apiKey):
-    """
-    Submit a quick search request to the Planet API
-
-    Parameters
-    ----------
-        item_type: string
-            name of a Planet item type, https://developers.planet.com/docs/apis/data/items-assets/#item-types
-        filter: dict
-            dictionary of one or more filters, https://developers.planet.com/docs/apis/data/searches-filtering/#field-filters
-        apiKey: string
-            your Planet API key, https://developers.planet.com/quickstart/apis/#find-your-api-key
-    Returns
-    -------
-        result: requests.models.Response
-            response from the Planet API
-    """
-
-    # Checks if apiKey is empty and if it valid
-    if apiKey == "" or not isinstance(apiKey, str):
-        raise ValueError(
-            "Must input an API Key(API parameter is either empty or is not a string)"
-        )
-
-    auth = HTTPBasicAuth(apiKey, "")
-    response = str(requests.get("https://api.planet.com/subscriptions/v1", auth=auth))
-    if "401" in response:
-        raise ValueError(
-            "Your APIKey is invalid or incorrect. Check here for Planet's guide to API Keys: https://developers.planet.com/docs/subscriptions/api-mechanics/"
-        )
-
-    search_endpoint_request = {"item_types": [item_type], "filter": filter}
-    result = requests.post(
-        "https://api.planet.com/data/v1/quick-search",
-        auth=HTTPBasicAuth(apiKey, ""),
-        json=search_endpoint_request,
-    )
+def search_API_request_object(item_type, apiKey, domain):
+    # Search API request object
+    search_endpoint_request = {
+      "item_types": [item_type],
+      "filter": domain
+    }
+    result = \
+      requests.post(
+        'https://api.planet.com/data/v1/quick-search',
+        auth=HTTPBasicAuth(apiKey, ''),
+        json=search_endpoint_request)
     return result
 
 
-def downloadable_PlanetIDs(result, domain_geometry):
+def prep_ID_geometry_lists(result, domain):
+
+    domain_geometry = shape(domain['config'][0]['config'])
+    
+    # view available data and prepare the list of planet IDs to download
     geojson_data = result.json()
-    gdf = gpd.GeoDataFrame.from_features(geojson_data["features"])
-
+    gdf = gpd.GeoDataFrame.from_features(geojson_data['features'])
+    
     # Add a new column to 'gdf' with the intersection area
-    gdf["intersection_area"] = gdf["geometry"].intersection(domain_geometry).area
-
+    gdf['intersection_area'] = gdf['geometry'].intersection(domain_geometry).area
+    
     # Calculate the percentage overlap
-    gdf["overlap_percentage"] = (gdf["intersection_area"] / domain_geometry.area) * 100
-    return geojson_data, gdf
+    gdf['overlap_percentage'] = (gdf['intersection_area'] / domain_geometry.area) * 100
 
-
-def id_gemoetry_lists(geojson_data, gdf):
-    id_list = [
-        feature["id"]
-        for idx, feature in enumerate(geojson_data["features"])
-        if gdf["overlap_percentage"].iloc[idx] >= 99
-    ]
-    geom_list = [  # noqa
-        feature["geometry"]
-        for idx, feature in enumerate(geojson_data["features"])
-        if gdf["overlap_percentage"].iloc[idx] >= 99
-    ]
+    # prep the ID and geometry lists
+    id_list = [feature['id'] for idx, feature in enumerate(geojson_data['features']) if gdf['overlap_percentage'].iloc[idx] >= 99]
+    geom_list = [feature['geometry'] for idx, feature in enumerate(geojson_data['features']) if gdf['overlap_percentage'].iloc[idx] >= 99]
     print(len(id_list))
     print(sorted(id_list))
-    return id_list
+
+    return(id_list)
 
 
-# Not sure if this one will work, its commented out in the reference
-def order_status(apiKey, item_type, asset_type, id_list):
-    for IDD in id_list:
-        print(IDD)
-        command = 'curl -L -H "Authorization: api-key ' + apiKey + '"'
-        sublink = (
-            " 'https://api.planet.com/data/v1/item-types/"
-            + item_type
-            + "/items/"
-            + IDD
-            + "/assets/' "
-        )
-        # sublink = " 'https://api.planet.com/data/v2/item-types/"+item_type+"/items/"+IDD+"/assets/' "
-        command = command + sublink + "| jq ." + asset_type + ".status"
-        status = subprocess.run(command, shell=True)  # noqa
-        print(command)
-        # break
+def prepare_submit_orders(id_list, item_type, bundle_type, apiKey, domain):
 
-
-def submit_orders(id_list, item_type, bundle_type, apiKey):
-    order_urls = pd.DataFrame(columns=["index", "ID_geom", "order_url"])
-
+    # prepare and submit the orders
+    order_urls = pd.DataFrame(columns = ["index","ID_geom", "order_url"])
+    
     # loop through each order payload, and submit
-    for idx, IDD in enumerate(id_list):
-        print(idx, IDD)
-
-        payload = build_payload(
-            [IDD], item_type, bundle_type, domain["config"][0]["config"]["coordinates"]
-        )
-        order_url = order_now(payload, apiKey)
-
-        order_urls.loc[idx, "index"] = idx
+    for idx,IDD in enumerate(id_list):
+        print(idx,IDD)
+        
+        payload = build_payload([IDD],item_type,bundle_type,domain['config'][0]['config']['coordinates'])
+        order_url = order_now(payload,apiKey)
+        
+        order_urls.loc[idx, "index"] = idx        
         order_urls.loc[idx, "ID_geom"] = IDD
         order_urls.loc[idx, "order_url"] = order_url
 
     return order_urls
 
 
-def save_data_to_csv(order_urls):
+# check out the data, save to a csv if you want to come back later
+def save_to_csv(order_urls):
     print(order_urls)
-    order_urls.to_csv("urlSaver.csv", index=None)
+    order_urls.to_csv('urlSaver.csv', index = None)# save all URLs
 
 
-def download_orders(order_urls, out_direc, apiKey):
-    # download the orders once ready
-    # outputs of "data not ready yet" mean that the orders need more time to process before downloading
+# download the orders once ready
+# outputs of "data not ready yet" mean that the orders need more time to process before downloading
+def download_ready_orders(order_urls, apiKey, out_direc):
     for url in order_urls.itertuples():
-        print(url.index, url.order_url)
+        print(url.index,url.order_url)
         print("start downloading data to".format(), out_direc + url.ID_geom)
-        if url.order_url is not None:
+        if url.order_url != None:
             try:
-                nantest = ~np.isnan(url.order_url)  # noqa
-            except Exception:
-                download_results(
-                    url.order_url, folder=out_direc + url.ID_geom, apiKey=apiKey
-                )
+                nantest = ~np.isnan(url.order_url)
+            except:
+                download_results(url.order_url, apiKey, folder = out_direc + url.ID_geom)
         # break
 
 
-def display_image(fp):
+def show_img(image_path):
+    fp = image_path
     img = rasterio.open(fp)
     show(img)
-
-
-def retrieve_model(out_direc, file):
-    hf_hub_download(
-        repo_id="geo-smart/planetsca_models",
-        filename=file,
-        local_dir=out_direc,
-    )
