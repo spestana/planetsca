@@ -25,4 +25,3 @@ Welcome to PlanetSCA's documentation
    prediction_evaluation
    simplify_aoi
    search_filters
-   
