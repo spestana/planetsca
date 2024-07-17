@@ -81,7 +81,7 @@ def check_hole(file_path: str) -> bool:
     Returns:
     - bool: True if there is a hole in the polygon, false if there is not
     """
-    
+
     with open(file_path) as f:
         geojson = json.load(f)
 
@@ -258,7 +258,7 @@ def simplify(file_path: str, ratio: int, AOI_Coordinates: list):
     - file_path: The path to the GeoJSON file
     - AOI_Coordinates: List of coordinates representing the AOI bounds
     """
-    
+
     update_file_path = file_path
     # Vertices Check
     if vertex_count(file_path) > 500:

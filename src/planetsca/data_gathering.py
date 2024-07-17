@@ -1,23 +1,24 @@
-#Imports
+# Imports
+import importlib
+import json
 import os
-import requests
+import pathlib
+import time
 import geopandas as gpd
+import numpy as np
+import pandas as pd
+import rasterio
+import requests
+from rasterio.plot import show
 from requests.auth import HTTPBasicAuth
 from shapely.geometry import shape
-import numpy as np
 import subprocess
-import json
-import pathlib
-import pandas as pd
-import time
-import rasterio
-from rasterio.plot import show
-import importlib
 from huggingface_hub import hf_hub_download
+
 headers = {'Content-Type': 'application/json'}
 
 ############ FUNCTIONS. DON'T CHANGE THESE!!! #########
-#Helper Functions
+# Helper Functions
 def read_geojson(file_name):
     file = importlib.import_module(file_name)
     return file.domain
@@ -30,39 +31,41 @@ def build_payload(item_ids, item_type, bundle_type, aoi_coordinates):
             {
                 "item_ids": item_ids,
                 "item_type": item_type,
-                "product_bundle": bundle_type
+                "product_bundle": bundle_type,
             }
         ],
         "tools": [
-            {
-                "clip": {
-                    "aoi": {
-                        "type": "Polygon",
-                        "coordinates": aoi_coordinates
-                    }
-                }
-            }
-        ]
+            {"clip": {"aoi": {"type": "Polygon","coordinates": aoi_coordinates}}}
+        ],
     }
     return payload
 
+
 def order_now(payload,apiKey):
     orders_url = 'https://api.planet.com/compute/ops/orders/v2'
-    response = requests.post(orders_url, data=json.dumps(payload), auth=HTTPBasicAuth(apiKey, ''), headers=headers)
+    response = requests.post(
+        orders_url, 
+        data=json.dumps(payload), 
+        auth=HTTPBasicAuth(apiKey, ''), 
+        headers=headers,
+        )
     print(response)
 
-    if response.status_code==202:
-        order_id =response.json()['id']
+    if response.status_code == 202:
+        order_id = response.json()['id']
         url = f"https://api.planet.com/compute/ops/orders/v2/{order_id}"
         # feature_check = requests.get(url, auth=(PLANET_API_KEY, ""))
-        feature_check = requests.get(url, auth=HTTPBasicAuth(apiKey, ''))
-        if feature_check.status_code==200:
-            print(f"Submitted a total of {len(feature_check.json()['products'][0]['item_ids'])} image ids: accepted a total of {len(feature_check.json()['products'][0]['item_ids'])} ids")
+        feature_check = requests.get(url, auth=HTTPBasicAuth(apiKey, ""))
+        if feature_check.status_code == 200:
+            print(
+                f"Submitted a total of {len(feature_check.json()['products'][0]['item_ids'])} image ids: accepted a total of {len(feature_check.json()['products'][0]['item_ids'])} ids"
+                )
             print(f"Order URL: https://api.planet.com/compute/ops/orders/v2/{order_id}")
             return f"https://api.planet.com/compute/ops/orders/v2/{order_id}"
     else:
-        print(f'Failed with Exception code : {response.status_code}')
+        print(f"Failed with Exception code : {response.status_code}")
         
+
 def download_results(order_url, apiKey, folder, overwrite=False):
     print("Attempting to download")  # Tell user what to do
     request_fufilled = True
@@ -107,20 +110,16 @@ def download_results(order_url, apiKey, folder, overwrite=False):
 
 def search_API_request_object(item_type, apiKey, domain):
     # Search API request object
-    search_endpoint_request = {
-      "item_types": [item_type],
-      "filter": domain
-    }
-    result = \
-      requests.post(
+    search_endpoint_request = {"item_types": [item_type], "filter": domain}
+    result = requests.post(
         'https://api.planet.com/data/v1/quick-search',
-        auth=HTTPBasicAuth(apiKey, ''),
-        json=search_endpoint_request)
+        auth=HTTPBasicAuth(apiKey, ""),
+        json=search_endpoint_request,
+    )
     return result
 
 
 def prep_ID_geometry_lists(result, domain):
-
     domain_geometry = shape(domain['config'][0]['config'])
     
     # view available data and prepare the list of planet IDs to download
@@ -132,14 +131,14 @@ def prep_ID_geometry_lists(result, domain):
     
     # Calculate the percentage overlap
     gdf['overlap_percentage'] = (gdf['intersection_area'] / domain_geometry.area) * 100
-
+    
     # prep the ID and geometry lists
     id_list = [feature['id'] for idx, feature in enumerate(geojson_data['features']) if gdf['overlap_percentage'].iloc[idx] >= 99]
     geom_list = [feature['geometry'] for idx, feature in enumerate(geojson_data['features']) if gdf['overlap_percentage'].iloc[idx] >= 99]
     print(len(id_list))
     print(sorted(id_list))
-
-    return(id_list)
+    
+    return(id_list, geom_list)
 
 
 def prepare_submit_orders(id_list, item_type, bundle_type, apiKey, domain):
@@ -151,7 +150,9 @@ def prepare_submit_orders(id_list, item_type, bundle_type, apiKey, domain):
     for idx,IDD in enumerate(id_list):
         print(idx,IDD)
         
-        payload = build_payload([IDD],item_type,bundle_type,domain['config'][0]['config']['coordinates'])
+        payload = build_payload(
+            [IDD],item_type,bundle_type,domain['config'][0]['config']['coordinates']
+            )
         order_url = order_now(payload,apiKey)
         
         order_urls.loc[idx, "index"] = idx        
@@ -171,17 +172,17 @@ def save_to_csv(order_urls):
 # outputs of "data not ready yet" mean that the orders need more time to process before downloading
 def download_ready_orders(order_urls, apiKey, out_direc):
     for url in order_urls.itertuples():
-        print(url.index,url.order_url)
+        print(url.index, url.order_url)
         print("start downloading data to".format(), out_direc + url.ID_geom)
-        if url.order_url != None:
+        if url.order_url is not None:
             try:
                 nantest = ~np.isnan(url.order_url)
             except:
-                download_results(url.order_url, apiKey, folder = out_direc + url.ID_geom)
+                download_results(url.order_url, apiKey, folder=out_direc + url.ID_geom)
         # break
 
 
 def show_img(image_path):
     fp = image_path
     img = rasterio.open(fp)
-    show(img)
+    return img
