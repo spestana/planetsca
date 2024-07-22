@@ -151,14 +151,13 @@ def prep_ID_geometry_lists(result, domain):
 
 
 def prepare_submit_orders(id_list, item_type, bundle_type, apiKey, domain):
-
     # prepare and submit the orders
     order_urls = pd.DataFrame(columns=["index", "ID_geom", "order_url"])
 
     # loop through each order payload, and submit
     for idx, IDD in enumerate(id_list):
         print(idx, IDD)
-        
+
         payload = build_payload(
             [IDD], item_type, bundle_type, domain["config"][0]["config"]["coordinates"]
         )
@@ -181,12 +180,12 @@ def save_to_csv(order_urls):
 # outputs of "data not ready yet" mean that the orders need more time to process before downloading
 def download_ready_orders(order_urls, apiKey, out_direc):
     for url in order_urls.itertuples():
-        print(url.index,url.order_url)
+        print(url.index, url.order_url)
         print("start downloading data to", out_direc + url.ID_geom)
-        if url.order_url != None:
+        if url.order_url is not None:
             try:
                 ~np.isnan(url.order_url)
-            except Exception as e:
+            except Exception:
                 download_results(url.order_url, apiKey, folder = out_direc + url.ID_geom)
         # break
 
