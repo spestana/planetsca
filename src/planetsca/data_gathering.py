@@ -186,7 +186,7 @@ def download_ready_orders(order_urls, apiKey, out_direc):
             try:
                 ~np.isnan(url.order_url)
             except Exception:
-                download_results(url.order_url, apiKey, folder = out_direc + url.ID_geom)
+                download_results(url.order_url, apiKey, folder=out_direc + url.ID_geom)
         # break
 
 
