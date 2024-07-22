@@ -53,34 +53,34 @@ def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output):
     return rasterized
 
 
-def data_training_existing(dir_samples: str) -> DataFrame:
+def data_training_existing(dir_samples):
     """
     Creates training data from a csv file
 
     Parameters:
-    - dir_samples: File location of the csv file
+        dir_samples: File location of the csv file
 
     Returns:
-    - DataFrame: DataFrame of training data
+        DataFrame: DataFrame of training data
     """
     df_train = pd.read_csv(dir_samples)
     return df_train
 
 
 def data_training_new(
-    dir_ROI: str, dir_raster: str, dir_ROIraster: str, dir_samples_root: str
-) -> DataFrame:
+    dir_ROI, dir_raster, dir_ROIraster, dir_samples_root
+):
     """
     Creates training data from scratch
 
     Parameters:
-    - dir_ROI: Directory path to regions of interest
-    - dir_raster: Directory to Planet image for training
-    - dir_ROIraster: Directory path to a ROI converted to shape mask
-    - dir_samples_root: Directory path to csv of training data extracted from images
+        dir_ROI: Directory path to regions of interest
+        dir_raster: Directory to Planet image for training
+        dir_ROIraster: Directory path to a ROI converted to shape mask
+        dir_samples_root: Directory path to csv of training data extracted from images
 
     Returns:
-    - DataFrame: DataFrame of training data
+        DataFrame: DataFrame of training data
     """
 
     flag_output = True
