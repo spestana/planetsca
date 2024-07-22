@@ -4,14 +4,15 @@ import json
 import os
 import pathlib
 import time
+
 import geopandas as gpd
 import numpy as np
 import pandas as pd
 import rasterio
 import requests
+from huggingface_hub import hf_hub_download
 from requests.auth import HTTPBasicAuth
 from shapely.geometry import shape
-from huggingface_hub import hf_hub_download
 
 headers = {"Content-Type": "application/json"}
 
@@ -120,50 +121,50 @@ def search_API_request_object(item_type, apiKey, domain):
 
 
 def prep_ID_geometry_lists(result, domain):
-    domain_geometry = shape(domain['config'][0]['config'])
+    domain_geometry = shape(domain["config"][0]["config"])
 
     # view available data and prepare the list of planet IDs to download
     geojson_data = result.json()
-    gdf = gpd.GeoDataFrame.from_features(geojson_data['features'])
+    gdf = gpd.GeoDataFrame.from_features(geojson_data["features"])
 
     # Add a new column to 'gdf' with the intersection area
-    gdf['intersection_area'] = gdf['geometry'].intersection(domain_geometry).area
+    gdf["intersection_area"] = gdf["geometry"].intersection(domain_geometry).area
 
     # Calculate the percentage overlap
-    gdf['overlap_percentage'] = (gdf['intersection_area'] / domain_geometry.area) * 100
+    gdf["overlap_percentage"] = (gdf["intersection_area"] / domain_geometry.area) * 100
 
     # prep the ID and geometry lists
     id_list = [
         feature["id"]
         for idx, feature in enumerate(geojson_data["features"])
         if gdf["overlap_percentage"].iloc[idx] >= 99
-    ]    
+    ]
     geom_list = [
         feature["geometry"]
         for idx, feature in enumerate(geojson_data["features"])
         if gdf["overlap_percentage"].iloc[idx] >= 99
-    ]    
+    ]
     print(len(id_list))
     print(sorted(id_list))
 
-    return(id_list, geom_list)
+    return id_list, geom_list
 
 
 def prepare_submit_orders(id_list, item_type, bundle_type, apiKey, domain):
 
     # prepare and submit the orders
-    order_urls = pd.DataFrame(columns = ["index","ID_geom", "order_url"])
+    order_urls = pd.DataFrame(columns=["index", "ID_geom", "order_url"])
 
     # loop through each order payload, and submit
-    for idx,IDD in enumerate(id_list):
+    for idx, IDD in enumerate(id_list):
         print(idx, IDD)
         
         payload = build_payload(
-            [IDD],item_type,bundle_type,domain['config'][0]['config']['coordinates']
+            [IDD], item_type, bundle_type, domain["config"][0]["config"]["coordinates"]
         )
-        order_url = order_now(payload,apiKey)
+        order_url = order_now(payload, apiKey)
 
-        order_urls.loc[idx, "index"] = idx        
+        order_urls.loc[idx, "index"] = idx
         order_urls.loc[idx, "ID_geom"] = IDD
         order_urls.loc[idx, "order_url"] = order_url
 
@@ -180,13 +181,13 @@ def save_to_csv(order_urls):
 # outputs of "data not ready yet" mean that the orders need more time to process before downloading
 def download_ready_orders(order_urls, apiKey, out_direc):
     for url in order_urls.itertuples():
-        print(url.index, url.order_url)
-        print("start downloading data to".format(), out_direc + url.ID_geom)
-        if url.order_url is not None:
+        print(url.index,url.order_url)
+        print("start downloading data to", out_direc + url.ID_geom)
+        if url.order_url != None:
             try:
-                nantest = ~np.isnan(url.order_url)
-            except:
-                download_results(url.order_url, apiKey, folder=out_direc + url.ID_geom)
+                ~np.isnan(url.order_url)
+            except Exception as e:
+                download_results(url.order_url, apiKey, folder = out_direc + url.ID_geom)
         # break
 
 
@@ -196,7 +197,7 @@ def show_img(image_path):
     return img
 
 
-#Hugging Face Downloads
+# Hugging Face Downloads
 def retrieve_model(out_direc, file):
     hf_hub_download(
         repo_id="geo-smart/planetsca_models",
