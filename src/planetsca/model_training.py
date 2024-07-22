@@ -88,7 +88,7 @@ def train_model(
 
 def retrieve_model(out_direc, file):
     hf_hub_download(
-        repo_id="geo-smart/planetsca_datasets",
+        repo_id="geo-smart/planetsca_models",
         filename=file,
         local_dir=out_direc,
     )

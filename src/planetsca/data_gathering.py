@@ -16,15 +16,35 @@ from shapely.geometry import shape
 
 headers = {"Content-Type": "application/json"}
 
-
-############ FUNCTIONS. DON'T CHANGE THESE!!! #########
-# Helper Functions
 def read_geojson(file_name):
+    """
+    Helper function for reading in a geojson file
+
+    Parameters:
+        file_name: String file path to geojson file
+
+    Returns:
+        Dictionary: Dictionary containing data filter information
+    """
+
     file = importlib.import_module(file_name)
     return file.domain
 
 
 def build_payload(item_ids, item_type, bundle_type, aoi_coordinates):
+    """
+    Helper function building payload for the Planet API
+
+    Parameters:
+        item_ids: Item id that contains date and location information
+        item_type: Class of spacecraft and/or processing level of an item https://developers.planet.com/docs/apis/data/items-assets/
+        bundle_type: Groups of assets for an item and contain metadata https://developers.planet.com/apis/orders/product-bundles-reference/
+        aoi_coordinates: Area of interest coordinates
+
+    Returns:
+        Dictionary: Payload dictionary containing all necessary information for the Planet API
+    """
+
     payload = {
         "name": item_ids[0],
         "source_type": "scenes",
@@ -43,6 +63,14 @@ def build_payload(item_ids, item_type, bundle_type, aoi_coordinates):
 
 
 def order_now(payload, apiKey):
+    """
+    Helper function for ordering data from Planet
+
+    Parameters:
+        payload: Dictionary containing all necessary information for the Planet API
+        apiKey: String containing a Planet API key
+    """
+
     orders_url = "https://api.planet.com/compute/ops/orders/v2"
     response = requests.post(
         orders_url,
@@ -68,6 +96,15 @@ def order_now(payload, apiKey):
 
 
 def download_results(order_url, apiKey, folder, overwrite=False):
+    """
+    Helper function for downloading the ordered data from Planet, makes a download request every 60 seconds until data is ready to download
+
+    Parameters:
+        order_url: String order urls created from prepare_submit_orders()
+        apiKey: String containing a Planet API key
+        folder: String folder path for output
+    """
+
     print("Attempting to download")  # Tell user what to do
     request_fufilled = True
     counter = 1
@@ -110,6 +147,18 @@ def download_results(order_url, apiKey, folder, overwrite=False):
 
 
 def search_API_request_object(item_type, apiKey, domain):
+    """
+    Sends a request to find if data is available in the Planet API
+
+    Parameters:
+        item_type: Class of spacecraft and/or processing level of an item https://developers.planet.com/docs/apis/data/items-assets/
+        apiKey: String containing a Planet API key
+        domain: Dictionary containing data filter information
+
+    Returns:
+        Response: Response object containing json file
+    """
+
     # Search API request object
     search_endpoint_request = {"item_types": [item_type], "filter": domain}
     result = requests.post(
@@ -121,6 +170,17 @@ def search_API_request_object(item_type, apiKey, domain):
 
 
 def prep_ID_geometry_lists(result, domain):
+    """
+    Creates list of IDs of requested data from Planet
+
+    Parameters:
+        result: Response object containing json file
+        domain: Dictionary containing information as read from a geojson file
+
+    Returns:
+        List: List of IDs and geometries of requested data from Planet
+    """
+
     domain_geometry = shape(domain["config"][0]["config"])
 
     # view available data and prepare the list of planet IDs to download
@@ -151,6 +211,20 @@ def prep_ID_geometry_lists(result, domain):
 
 
 def prepare_submit_orders(id_list, item_type, bundle_type, apiKey, domain):
+    """
+    Submits order payloads to the Planet API by iterating through each id
+
+    Parameters:
+        id_list: List of IDs of data to be requested from Planet
+        item_type: Class of spacecraft and/or processing level of an item https://developers.planet.com/docs/apis/data/items-assets/
+        bundle_type: Groups of assets for an item and contain metadata https://developers.planet.com/apis/orders/product-bundles-reference/
+        apiKey: String containing a Planet API key
+        domain: Dictionary containing data filter information
+
+    Returns:
+        DataFrame: DataFrame of order urls with geometry IDs and indicies
+    """
+
     # prepare and submit the orders
     order_urls = pd.DataFrame(columns=["index", "ID_geom", "order_url"])
 
@@ -170,15 +244,28 @@ def prepare_submit_orders(id_list, item_type, bundle_type, apiKey, domain):
     return order_urls
 
 
-# check out the data, save to a csv if you want to come back later
 def save_to_csv(order_urls):
+    """
+    For checking out data and saving to a csv for later use
+
+    Parameters:
+        order_urls: DataFrame of order urls with geometry IDs and indicies
+    """
+
     print(order_urls)
     order_urls.to_csv("urlSaver.csv", index=None)  # save all URLs
 
 
-# download the orders once ready
-# outputs of "data not ready yet" mean that the orders need more time to process before downloading
 def download_ready_orders(order_urls, apiKey, out_direc):
+    """
+    Downloads ready orders from the Planet API, if "data not ready yet" waits 60 seconds before making another request
+
+    Parameters:
+        order_urls: DataFrame of order urls with geometry IDs and indicies
+        apiKey: String containing a Planet API key
+        out_direc: String file path to output directory
+    """
+
     for url in order_urls.itertuples():
         print(url.index, url.order_url)
         print("start downloading data to", out_direc + url.ID_geom)
@@ -191,15 +278,32 @@ def download_ready_orders(order_urls, apiKey, out_direc):
 
 
 def show_img(image_path):
+    """
+    Displays rasterio image
+
+    Parameters:
+        image_path: String file path to tif image
+
+    Returns:
+        DatasetReader: Contains Raster data and ways to interact with the image
+    """
+
     fp = image_path
     img = rasterio.open(fp)
     return img
 
 
-# Hugging Face Downloads
-def retrieve_model(out_direc, file):
+def retrieve_dataset(out_direc, file):
+    """
+    Downloads datasets from hugging faces
+
+    Parameters:
+        out_direc: String file path to output directory
+        file: String file name to download
+    """
+
     hf_hub_download(
-        repo_id="geo-smart/planetsca_models",
+        repo_id="geo-smart/planetsca_datasets",
         filename=file,
         local_dir=out_direc,
     )

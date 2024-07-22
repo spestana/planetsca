@@ -4,7 +4,6 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 import rasterio
-from pandas import DataFrame
 from rasterio import features
 from rasterio.enums import MergeAlg
 
@@ -12,6 +11,20 @@ warnings.filterwarnings("ignore")
 
 
 def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output):
+    """
+    Helper function for converting vector file to a raster file
+
+    Parameters:
+        dir_vector: String file path to vector file
+        dir_raster: String file path to Planet Image
+        dir_out: String file path to output raster file
+        flag_output: Boolean flag for allowing overwriting of output file
+
+
+    Returns:
+        DataFrame: DataFrame of training data
+    """
+
     vector = gpd.read_file(dir_vector)
     # Get list of geometries for all features in vector file
     list(vector.geometry)
@@ -58,26 +71,25 @@ def data_training_existing(dir_samples):
     Creates training data from a csv file
 
     Parameters:
-        dir_samples: File location of the csv file
+        dir_samples: String file location of the csv file
 
     Returns:
         DataFrame: DataFrame of training data
     """
+
     df_train = pd.read_csv(dir_samples)
     return df_train
 
 
-def data_training_new(
-    dir_ROI, dir_raster, dir_ROIraster, dir_samples_root
-):
+def data_training_new(dir_ROI, dir_raster, dir_ROIraster, dir_samples_root):
     """
     Creates training data from scratch
 
     Parameters:
-        dir_ROI: Directory path to regions of interest
-        dir_raster: Directory to Planet image for training
-        dir_ROIraster: Directory path to a ROI converted to shape mask
-        dir_samples_root: Directory path to csv of training data extracted from images
+        dir_ROI: String directory path to regions of interest
+        dir_raster: String directory to Planet image for training
+        dir_ROIraster: String directory path to a ROI converted to shape mask
+        dir_samples_root: String directory path to csv of training data extracted from images
 
     Returns:
         DataFrame: DataFrame of training data

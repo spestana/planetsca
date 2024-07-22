@@ -16,7 +16,6 @@ def get_coordinates(file_path: str) -> list:
     Returns:
     - list: List of vertices from GeoJSON polygon
     """
-
     with open(file_path) as f:
         data = json.load(f)
 
@@ -49,7 +48,6 @@ def vertex_count(file_path: str) -> int:
     Returns:
     - int: Number of vertices in geojson file
     """
-
     return len(get_coordinates(file_path)) - 1
 
 
@@ -61,7 +59,6 @@ def reduce_vertex(file_path: str, ratio: int):
     - file_path: The path to the GeoJSON file
     - ratio: Sets the concave_hull ratio
     """
-
     with fiona.open(file_path) as collection:
         hulls = [concave_hull(shape(feat["geometry"]), ratio) for feat in collection]
 
@@ -81,7 +78,6 @@ def check_hole(file_path: str) -> bool:
     Returns:
     - bool: True if there is a hole in the polygon, false if there is not
     """
-
     with open(file_path) as f:
         geojson = json.load(f)
 
@@ -100,7 +96,6 @@ def fill_holes(file_path: str):
     Parameters:
     - file_path: The path to the GeoJSON file.
     """
-
     coordinates_list = get_coordinates(file_path)
 
     new_coordinates_list = []
@@ -135,7 +130,6 @@ def check_overlap(file_path: str) -> bool:
      Returns:
     - bool: True if there is overlap and false if there is no overlap
     """
-
     coordinates_list = get_coordinates(file_path)
     polygon1 = []
     polygon2 = []
@@ -164,7 +158,6 @@ def fix_overlap(file_path: str):
     Parameters:
     - file_path: The path to the GeoJSON file.
     """
-
     coordinates_list = get_coordinates(file_path)
     polygon1 = []
     polygon2 = []
@@ -206,7 +199,6 @@ def clipping_check(file_path: str, AOI_Coordinates: list) -> bool:
      Returns:
     - bool: True if it clips outside and false if it does not
     """
-
     given_polygon = Polygon(get_coordinates(file_path))
 
     first_array = AOI_Coordinates[0]
@@ -228,7 +220,6 @@ def fix_clipping(file_path: str, AOI_Coordinates: list):
     - file_path: The path to the GeoJSON file
     - AOI_Coordinates: List of coordinates representing the AOI bounds
     """
-
     first_array = AOI_Coordinates[0]
     last_array = AOI_Coordinates[-1]
 
@@ -258,7 +249,6 @@ def simplify(file_path: str, ratio: int, AOI_Coordinates: list):
     - file_path: The path to the GeoJSON file
     - AOI_Coordinates: List of coordinates representing the AOI bounds
     """
-
     update_file_path = file_path
     # Vertices Check
     if vertex_count(file_path) > 500:
