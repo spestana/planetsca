@@ -183,7 +183,7 @@ def run_sca_prediction_fusion(dir_raster, dir_out, nodata_flag, model):
         model: str
             the directory where model used to predict snow cover is stored
     """
-    
+
     for f in glob.glob(dir_raster + "/*.tif", recursive=True):
         file_out = dir_out + "/" + os.path.basename(f)[0:-4] + "_SCA.tif"
         ndvi_out = dir_out + "/" + os.path.basename(f)[0:-4] + "_NDVI.tif"

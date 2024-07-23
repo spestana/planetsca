@@ -23,7 +23,7 @@ def read_geojson(file_name):
 
     Parameters
     ----------
-        file_name: str 
+        file_name: str
             file path to geojson file
 
     Returns
@@ -116,11 +116,11 @@ def download_results(order_url, apiKey, folder, overwrite=False):
 
     Parameters
     ----------
-        order_url: str 
+        order_url: str
             Order urls created from prepare_submit_orders()
         apiKey: str
             Planet API key
-        folder: str 
+        folder: str
             folder path for output
     """
 
@@ -207,7 +207,7 @@ def prep_ID_geometry_lists(result, domain):
 
     Returns
     -------
-        id_list, geom_list: list[str], list[float] 
+        id_list, geom_list: list[str], list[float]
             List of IDs and geometries of requested data from Planet
     """
 
@@ -288,7 +288,7 @@ def save_to_csv(order_urls):
 
     Parameters
     ----------
-        order_urls: DataFrame 
+        order_urls: DataFrame
             Order urls with geometry IDs and indices
     """
 
@@ -306,7 +306,7 @@ def download_ready_orders(order_urls, apiKey, out_direc):
             Order urls with geometry IDs and indices
         apiKey: str
             Planet API key
-        out_direc: str 
+        out_direc: str
             File path to output directory
     """
 
@@ -347,9 +347,9 @@ def retrieve_dataset(out_direc, file):
 
     Parameters
     ----------
-        out_direc: str 
+        out_direc: str
             File path to output directory
-        file: str 
+        file: str
             File name to download
     """
 

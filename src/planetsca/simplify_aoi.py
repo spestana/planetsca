@@ -72,7 +72,7 @@ def reduce_vertex(file_path, ratio):
         ratio: float
             Sets the concave_hull ratio
     """
-    
+
     with fiona.open(file_path) as collection:
         hulls = [concave_hull(shape(feat["geometry"]), ratio) for feat in collection]
 

@@ -16,13 +16,13 @@ def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output):
 
     Parameters
     ----------
-        dir_vector: str 
+        dir_vector: str
             File path to vector file
-        dir_raster: str 
+        dir_raster: str
             File path to Planet Image
-        dir_out: str 
+        dir_out: str
             File path to output raster file
-        flag_output: bool 
+        flag_output: bool
             Flag for allowing overwriting of output file
 
     Returns
@@ -78,7 +78,7 @@ def data_training_existing(dir_samples):
 
     Parameters
     ----------
-        dir_samples: str 
+        dir_samples: str
             File location of the csv file
 
     Returns
@@ -101,9 +101,9 @@ def data_training_new(dir_ROI, dir_raster, dir_ROIraster, dir_samples_root):
             Directory path to regions of interest
         dir_raster: str
             Directory to Planet image for training
-        dir_ROIraster: str 
+        dir_ROIraster: str
             Directory path to a ROI converted to shape mask
-        dir_samples_root: str 
+        dir_samples_root: str
             Directory path to csv of training data extracted from images
 
     Returns
