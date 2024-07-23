@@ -17,9 +17,9 @@ from shapely.geometry import shape
 headers = {"Content-Type": "application/json"}
 
 
-def read_geojson(file_name):
+def extract_domain(file_name):
     """
-    Helper function for reading in a geojson file
+    Helper function for extracting domain from a geojson file
 
     Parameters
     ----------
