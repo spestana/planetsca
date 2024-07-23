@@ -14,15 +14,21 @@ def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output):
     """
     Helper function for converting vector file to a raster file
 
-    Parameters:
-        dir_vector: String file path to vector file
-        dir_raster: String file path to Planet Image
-        dir_out: String file path to output raster file
-        flag_output: Boolean flag for allowing overwriting of output file
+    Parameters
+    ----------
+        dir_vector: str 
+            File path to vector file
+        dir_raster: str 
+            File path to Planet Image
+        dir_out: str 
+            File path to output raster file
+        flag_output: bool 
+            Flag for allowing overwriting of output file
 
-
-    Returns:
-        DataFrame: DataFrame of training data
+    Returns
+    -------
+        rasterized: np.array
+            Rasterized version of the vector file
     """
 
     vector = gpd.read_file(dir_vector)
@@ -70,11 +76,15 @@ def data_training_existing(dir_samples):
     """
     Creates training data from a csv file
 
-    Parameters:
-        dir_samples: String file location of the csv file
+    Parameters
+    ----------
+        dir_samples: str 
+            File location of the csv file
 
-    Returns:
-        DataFrame: DataFrame of training data
+    Returns
+    -------
+        df_train: DataFrame
+            DataFrame of training data
     """
 
     df_train = pd.read_csv(dir_samples)
@@ -85,14 +95,21 @@ def data_training_new(dir_ROI, dir_raster, dir_ROIraster, dir_samples_root):
     """
     Creates training data from scratch
 
-    Parameters:
-        dir_ROI: String directory path to regions of interest
-        dir_raster: String directory to Planet image for training
-        dir_ROIraster: String directory path to a ROI converted to shape mask
-        dir_samples_root: String directory path to csv of training data extracted from images
+    Parameters
+    ----------
+        dir_ROI: str
+            Directory path to regions of interest
+        dir_raster: str
+            Directory to Planet image for training
+        dir_ROIraster: str 
+            Directory path to a ROI converted to shape mask
+        dir_samples_root: str 
+            Directory path to csv of training data extracted from images
 
-    Returns:
-        DataFrame: DataFrame of training data
+    Returns
+    -------
+        df_train: DataFrame
+            DataFrame of training data
     """
 
     flag_output = True

@@ -16,15 +16,20 @@ from shapely.geometry import shape
 
 headers = {"Content-Type": "application/json"}
 
+
 def read_geojson(file_name):
     """
     Helper function for reading in a geojson file
 
-    Parameters:
-        file_name: String file path to geojson file
+    Parameters
+    ----------
+        file_name: str 
+            file path to geojson file
 
-    Returns:
-        Dictionary: Dictionary containing data filter information
+    Returns
+    -------
+        file.domain: dict
+            Dictionary containing data filter information
     """
 
     file = importlib.import_module(file_name)
@@ -35,14 +40,21 @@ def build_payload(item_ids, item_type, bundle_type, aoi_coordinates):
     """
     Helper function building payload for the Planet API
 
-    Parameters:
-        item_ids: Item id that contains date and location information
-        item_type: Class of spacecraft and/or processing level of an item https://developers.planet.com/docs/apis/data/items-assets/
-        bundle_type: Groups of assets for an item and contain metadata https://developers.planet.com/apis/orders/product-bundles-reference/
-        aoi_coordinates: Area of interest coordinates
+    Parameters
+    ----------
+        item_ids: str
+            Item id that contains date and location information
+        item_type: str
+            Class of spacecraft and/or processing level of an item https://developers.planet.com/docs/apis/data/items-assets/
+        bundle_type: str
+            Groups of assets for an item and contain metadata https://developers.planet.com/apis/orders/product-bundles-reference/
+        aoi_coordinates: list[float]
+            Area of interest coordinates
 
-    Returns:
-        Dictionary: Payload dictionary containing all necessary information for the Planet API
+    Returns
+    -------
+        payload: dict
+            Dictionary containing all necessary information for the Planet API
     """
 
     payload = {
@@ -66,9 +78,12 @@ def order_now(payload, apiKey):
     """
     Helper function for ordering data from Planet
 
-    Parameters:
-        payload: Dictionary containing all necessary information for the Planet API
-        apiKey: String containing a Planet API key
+    Parameters
+    ----------
+        payload: dict
+            Dictionary containing all necessary information for the Planet API
+        apiKey: str
+            Planet API key
     """
 
     orders_url = "https://api.planet.com/compute/ops/orders/v2"
@@ -99,10 +114,14 @@ def download_results(order_url, apiKey, folder, overwrite=False):
     """
     Helper function for downloading the ordered data from Planet, makes a download request every 60 seconds until data is ready to download
 
-    Parameters:
-        order_url: String order urls created from prepare_submit_orders()
-        apiKey: String containing a Planet API key
-        folder: String folder path for output
+    Parameters
+    ----------
+        order_url: str 
+            Order urls created from prepare_submit_orders()
+        apiKey: str
+            Planet API key
+        folder: str 
+            folder path for output
     """
 
     print("Attempting to download")  # Tell user what to do
@@ -150,13 +169,19 @@ def search_API_request_object(item_type, apiKey, domain):
     """
     Sends a request to find if data is available in the Planet API
 
-    Parameters:
-        item_type: Class of spacecraft and/or processing level of an item https://developers.planet.com/docs/apis/data/items-assets/
-        apiKey: String containing a Planet API key
-        domain: Dictionary containing data filter information
+    Parameters
+    ----------
+        item_type: str
+            Class of spacecraft and/or processing level of an item https://developers.planet.com/docs/apis/data/items-assets/
+        apiKey: str
+            Planet API key
+        domain: dict
+            Dictionary containing data filter information
 
-    Returns:
-        Response: Response object containing json file
+    Returns
+    -------
+        result: Response
+            Response object containing json file
     """
 
     # Search API request object
@@ -173,12 +198,17 @@ def prep_ID_geometry_lists(result, domain):
     """
     Creates list of IDs of requested data from Planet
 
-    Parameters:
-        result: Response object containing json file
-        domain: Dictionary containing information as read from a geojson file
+    Parameters
+    ----------
+        result: Response
+            Response object containing json file
+        domain: dict
+            Dictionary containing information as read from a geojson file
 
-    Returns:
-        List: List of IDs and geometries of requested data from Planet
+    Returns
+    -------
+        id_list, geom_list: list[str], list[float] 
+            List of IDs and geometries of requested data from Planet
     """
 
     domain_geometry = shape(domain["config"][0]["config"])
@@ -214,15 +244,23 @@ def prepare_submit_orders(id_list, item_type, bundle_type, apiKey, domain):
     """
     Submits order payloads to the Planet API by iterating through each id
 
-    Parameters:
-        id_list: List of IDs of data to be requested from Planet
-        item_type: Class of spacecraft and/or processing level of an item https://developers.planet.com/docs/apis/data/items-assets/
-        bundle_type: Groups of assets for an item and contain metadata https://developers.planet.com/apis/orders/product-bundles-reference/
-        apiKey: String containing a Planet API key
-        domain: Dictionary containing data filter information
+    Parameters
+    ----------
+        id_list: list[str]
+            List of IDs of data to be requested from Planet
+        item_type: str
+            Class of spacecraft and/or processing level of an item https://developers.planet.com/docs/apis/data/items-assets/
+        bundle_type: str
+            Groups of assets for an item and contain metadata https://developers.planet.com/apis/orders/product-bundles-reference/
+        apiKey: str
+            Planet API key
+        domain: dict
+            Dictionary containing data filter information
 
-    Returns:
-        DataFrame: DataFrame of order urls with geometry IDs and indicies
+    Returns
+    -------
+        order_urls: DataFrame
+            Order urls with geometry IDs and indices
     """
 
     # prepare and submit the orders
@@ -248,8 +286,10 @@ def save_to_csv(order_urls):
     """
     For checking out data and saving to a csv for later use
 
-    Parameters:
-        order_urls: DataFrame of order urls with geometry IDs and indicies
+    Parameters
+    ----------
+        order_urls: DataFrame 
+            Order urls with geometry IDs and indices
     """
 
     print(order_urls)
@@ -260,10 +300,14 @@ def download_ready_orders(order_urls, apiKey, out_direc):
     """
     Downloads ready orders from the Planet API, if "data not ready yet" waits 60 seconds before making another request
 
-    Parameters:
-        order_urls: DataFrame of order urls with geometry IDs and indicies
-        apiKey: String containing a Planet API key
-        out_direc: String file path to output directory
+    Parameters
+    ----------
+        order_urls: DataFrame
+            Order urls with geometry IDs and indices
+        apiKey: str
+            Planet API key
+        out_direc: str 
+            File path to output directory
     """
 
     for url in order_urls.itertuples():
@@ -281,11 +325,15 @@ def show_img(image_path):
     """
     Displays rasterio image
 
-    Parameters:
-        image_path: String file path to tif image
+    Parameters
+    ----------
+        image_path: str
+            File path to tif image
 
-    Returns:
-        DatasetReader: Contains Raster data and ways to interact with the image
+    Returns
+    -------
+        img: DataSetReader
+            Contains Raster data and ways to interact with the image
     """
 
     fp = image_path
@@ -297,9 +345,12 @@ def retrieve_dataset(out_direc, file):
     """
     Downloads datasets from hugging faces
 
-    Parameters:
-        out_direc: String file path to output directory
-        file: String file name to download
+    Parameters
+    ----------
+        out_direc: str 
+            File path to output directory
+        file: str 
+            File name to download
     """
 
     hf_hub_download(

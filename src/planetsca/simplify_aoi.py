@@ -6,15 +6,19 @@ from shapely import concave_hull, unary_union
 from shapely.geometry import Polygon, mapping, shape
 
 
-def get_coordinates(file_path: str) -> list:
+def get_coordinates(file_path):
     """
-    Gets coordinates from a GeoJSON file - Helper Method
+    Helper Method - Gets coordinates from a GeoJSON file
 
-    Parameters:
-    - file_path: The path to the GeoJSON file
+    Parameters
+    ----------
+        file_path: str
+            Path location of geojson file
 
-    Returns:
-    - list: List of vertices from GeoJSON polygon
+    Returns
+    -------
+        coordinates_list: List[float]
+            List of vertices from GeoJSON polygon
     """
     with open(file_path) as f:
         data = json.load(f)
@@ -38,27 +42,37 @@ def get_coordinates(file_path: str) -> list:
     return coordinates_list
 
 
-def vertex_count(file_path: str) -> int:
+def vertex_count(file_path):
     """
     Counts vertices from a GeoJSON file.
 
-    Parameters:
-    - file_path: The path to the GeoJSON file.
+    Parameters
+    ----------
+        file_path: str
+            Path location of geojson file
 
-    Returns:
-    - int: Number of vertices in geojson file
+    Returns
+    -------
+        vertex_num: int
+            Number of vertices in geojson file
     """
-    return len(get_coordinates(file_path)) - 1
+
+    vertex_num = len(get_coordinates(file_path)) - 1
+    return vertex_num
 
 
-def reduce_vertex(file_path: str, ratio: int):
+def reduce_vertex(file_path, ratio):
     """
     Reduces the number of vertices in a polygon
 
-    Parameters:
-    - file_path: The path to the GeoJSON file
-    - ratio: Sets the concave_hull ratio
+    Parameters
+    ----------
+        file_path: str
+            Path location of geojson file
+        ratio: float
+            Sets the concave_hull ratio
     """
+    
     with fiona.open(file_path) as collection:
         hulls = [concave_hull(shape(feat["geometry"]), ratio) for feat in collection]
 
@@ -68,16 +82,21 @@ def reduce_vertex(file_path: str, ratio: int):
         json.dump(dissolved_hulls, f)
 
 
-def check_hole(file_path: str) -> bool:
+def check_hole(file_path):
     """
     Checks if a polygon contains a hole.
 
-    Parameters:
-    - file_path: The path to the GeoJSON file.
+    Parameters
+    ----------
+        file_path: str
+            Path location of geojson file
 
-    Returns:
-    - bool: True if there is a hole in the polygon, false if there is not
+    Returns
+    -------
+        boolean: bool
+            True if there is a hole in the polygon, false if there is not
     """
+
     with open(file_path) as f:
         geojson = json.load(f)
 
@@ -93,9 +112,12 @@ def fill_holes(file_path: str):
     """
     Fills holes of GeoJSON by deleting interior ring coordinates and creating a new GeoJSON with new coordinates
 
-    Parameters:
-    - file_path: The path to the GeoJSON file.
+    Parameters
+    ----------
+        file_path: str
+            Path location of geojson file
     """
+
     coordinates_list = get_coordinates(file_path)
 
     new_coordinates_list = []
@@ -124,11 +146,15 @@ def check_overlap(file_path: str) -> bool:
     """
     Checks if two polygons are overlapping from a GeoJSON file
 
-    Parameters:
-    - file_path: The path to the GeoJSON file.
+    Parameters
+    ----------
+        file_path: str
+            Path location of geojson file
 
-     Returns:
-    - bool: True if there is overlap and false if there is no overlap
+    Returns
+    -------
+        boolean: bool
+            True if there is overlap and false if there is no overlap
     """
     coordinates_list = get_coordinates(file_path)
     polygon1 = []
@@ -155,8 +181,10 @@ def fix_overlap(file_path: str):
     """
     Fixes the overlap of two polygons by deleting the overlapped area and merging the two polygons into one polygon
 
-    Parameters:
-    - file_path: The path to the GeoJSON file.
+    Parameters
+    ----------
+        file_path: str
+            Path location of geojson file
     """
     coordinates_list = get_coordinates(file_path)
     polygon1 = []
@@ -192,12 +220,17 @@ def clipping_check(file_path: str, AOI_Coordinates: list) -> bool:
     """
     Checks if a given polygon clips outside the contracted AOI coordinates
 
-    Parameters:
-    - file_path: The path to the GeoJSON file
-    - AOI_Coordinates: List of coordinates representing the AOI bounds
+    Parameters
+    ----------
+        file_path: str
+            Path location of geojson file
+        AOI_Coordinates: List[float]
+            List of coordinates representing the AOI bounds
 
-     Returns:
-    - bool: True if it clips outside and false if it does not
+    Returns
+    -------
+        boolean: bool
+            True if it clips outside and false if it does not
     """
     given_polygon = Polygon(get_coordinates(file_path))
 
@@ -216,9 +249,12 @@ def fix_clipping(file_path: str, AOI_Coordinates: list):
     """
     Deletes all parts of a Polygon that exceed the AOI coordinate bounds
 
-    Parameters:
-    - file_path: The path to the GeoJSON file
-    - AOI_Coordinates: List of coordinates representing the AOI bounds
+    Parameters
+    ----------
+        file_path: str
+            Path location of geojson file
+        AOI_Coordinates: List[float]
+            List of coordinates representing the AOI bounds
     """
     first_array = AOI_Coordinates[0]
     last_array = AOI_Coordinates[-1]
@@ -245,9 +281,12 @@ def simplify(file_path: str, ratio: int, AOI_Coordinates: list):
     """
     Runs all checks and fixes to adhere to Planet's AOI Geometry Limits
 
-    Parameters:
-    - file_path: The path to the GeoJSON file
-    - AOI_Coordinates: List of coordinates representing the AOI bounds
+    Parameters
+    ----------
+        file_path: str
+            Path location of geojson file
+        AOI_Coordinates: List[float]
+            List of coordinates representing the AOI bounds
     """
     update_file_path = file_path
     # Vertices Check
