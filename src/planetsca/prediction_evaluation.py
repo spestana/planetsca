@@ -13,16 +13,16 @@ def run_sca_prediction(dir_raster, dir_out, nodata_flag, model):
 
     Parameters
     ----------
-        dir_raster: string
+        dir_raster: str
             the directory or the file of planet images
-        dir_out: string
+        dir_out: str
             the directory where output snow cover images will be stored
         nodata_flag: int, default=9
             the value used to represent no data in the predicted snow cover image, default value is 9
-        model:
-            the model used to predict snow cover
-
+        model: str
+            the directory where model used to predict snow cover is stored
     """
+
     # if output directory not exist then creat the output directory
     if not os.path.exists(dir_out):
         os.mkdir(dir_out)
@@ -81,6 +81,21 @@ def run_sca_prediction(dir_raster, dir_out, nodata_flag, model):
 
 
 def run_sca_prediction_band(f_raster, file_out, nodata_flag, model):
+    """
+    CLARIFICIATION NEEDED
+
+    Parameters
+    ----------
+        dir_raster: str
+            the directory or the file of planet images
+        dir_out: str
+            the directory where output snow cover images will be stored
+        nodata_flag: int, default=9
+            the value used to represent no data in the predicted snow cover image, default value is 9
+        model: str
+            the directory where model used to predict snow cover is stored
+    """
+
     ndvi_out = (
         os.path.dirname(file_out) + "/" + os.path.basename(file_out)[0:-8] + "_NDVI.tif"
     )
@@ -154,6 +169,21 @@ def run_sca_prediction_band(f_raster, file_out, nodata_flag, model):
 
 
 def run_sca_prediction_fusion(dir_raster, dir_out, nodata_flag, model):
+    """
+    CLARIFICIATION NEEDED
+
+    Parameters
+    ----------
+        dir_raster: str
+            the directory or the file of planet images
+        dir_out: str
+            the directory where output snow cover images will be stored
+        nodata_flag: int, default=9
+            the value used to represent no data in the predicted snow cover image, default value is 9
+        model: str
+            the directory where model used to predict snow cover is stored
+    """
+
     for f in glob.glob(dir_raster + "/*.tif", recursive=True):
         file_out = dir_out + "/" + os.path.basename(f)[0:-4] + "_SCA.tif"
         ndvi_out = dir_out + "/" + os.path.basename(f)[0:-4] + "_NDVI.tif"
@@ -218,6 +248,21 @@ def run_sca_prediction_fusion(dir_raster, dir_out, nodata_flag, model):
 
 # run model prediction
 def run_sca_prediction_meadows(dir_raster, dir_out, nodata_flag, model):
+    """
+    CLARIFICIATION NEEDED
+
+    Parameters
+    ----------
+        dir_raster: str
+            the directory or the file of planet images
+        dir_out: str
+            the directory where output snow cover images will be stored
+        nodata_flag: int, default=9
+            the value used to represent no data in the predicted snow cover image, default value is 9
+        model: str
+            the directory where model used to predict snow cover is stored
+    """
+
     subfolders = [f.path for f in os.scandir(dir_raster) if f.is_dir()]
     ids = [x.split("/")[-1] for x in subfolders]
     for i in range(len(ids)):
@@ -287,9 +332,18 @@ def run_sca_prediction_meadows(dir_raster, dir_out, nodata_flag, model):
 
 
 def single_image_evaluation(dir_raster, dir_model, dir_out):
-    # dir_raster = 'data/download/20180528_181110_1025_3B_AnalyticMS_SR_clip.tif'
-    # dir_model = "random_forest_20240116_binary_174K.joblib"
-    # dir_out = './data/SCA/'
+    """
+    Runs SCA prediction on a single image
+
+    Parameters
+    ----------
+        dir_raster: str
+            the directory or the file of planet images
+        dir_model: str
+            the directory where model used to predict snow cover is stored
+        dir_out: str
+            the directory where output snow cover images will be stored
+    """
     model = joblib.load(dir_model)
     nodata_flag = 9
     run_sca_prediction(dir_raster, dir_out, nodata_flag, model)

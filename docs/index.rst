@@ -17,7 +17,6 @@ Welcome to PlanetSCA's documentation
    :maxdepth: 2
    :caption: Contents:
 
-   index
    installation
    data_gathering
    data_preparation
