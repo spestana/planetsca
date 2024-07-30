@@ -80,7 +80,7 @@ def run_sca_prediction(dir_raster, dir_out, nodata_flag, model):
             dst.write(img_prediction, indexes=1, masked=True)
 
 
-def run_sca_prediction_band(f_raster, file_out, nodata_flag, model):
+def run_sca_prediction_band(dir_raster, dir_out, nodata_flag, model):
     """
     CLARIFICIATION NEEDED
 
@@ -97,13 +97,13 @@ def run_sca_prediction_band(f_raster, file_out, nodata_flag, model):
     """
 
     ndvi_out = (
-        os.path.dirname(file_out) + "/" + os.path.basename(file_out)[0:-8] + "_NDVI.tif"
+        os.path.dirname(dir_out) + "/" + os.path.basename(dir_out)[0:-8] + "_NDVI.tif"
     )
     if not os.path.exists(ndvi_out):
         print(ndvi_out)
-        print("Start to predict:".format(), os.path.basename(f_raster))
+        print("Start to predict:".format(), os.path.basename(dir_raster))
 
-        with rasterio.open(f_raster, "r") as ds:
+        with rasterio.open(dir_raster, "r") as ds:
             arr = ds.read()  # read all raster values
 
         print("Image dimension:".format(), arr.shape)  #
@@ -142,7 +142,7 @@ def run_sca_prediction_band(f_raster, file_out, nodata_flag, model):
         # save image to file_out
 
         with rasterio.open(
-            file_out,
+            dir_out,
             "w",
             driver="GTiff",
             transform=ds.transform,

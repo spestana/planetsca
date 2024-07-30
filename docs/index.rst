@@ -8,16 +8,12 @@ Welcome to PlanetSCA's documentation
 
 **This is a python library for mapping snow covered areas (SCA) from high-resolution PlanetScope images using a Random Forest model.**
 
-.. note::
-
-   This project is under active development.
-
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    installation
+   running
    data_gathering
    data_preparation
    model_training

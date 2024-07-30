@@ -1,9 +1,10 @@
 from shapely.geometry import shape
+import json
 
 
 def make_domain_geometry_from_bounds(bounds: list[float]):
     """
-    Make a shapely geometry polygon from from longitude and latitude bounds (a rectangular area)
+    Helper - Make a shapely geometry polygon from from longitude and latitude bounds (a rectangular area)
 
     Parameters
     ----------
@@ -57,6 +58,44 @@ def make_geometry_filter_from_bounds(bounds: list[float]) -> dict:
 
     # create a geojson-like geometry dictionary
     geo_json_geometry, _ = make_domain_geometry_from_bounds(bounds)
+
+    # create the geometry filter for the Planet API
+    geometry_filter = {
+        "type": "GeometryFilter",
+        "field_name": "geometry",
+        "config": geo_json_geometry,
+    }
+
+    return geometry_filter
+
+
+def make_geometry_filter_from_geojson(geo_json_path: str) -> dict:
+    """
+    Make a geometry filter dictionary for the Planet API from a geojson file path
+
+    Parameters
+    ----------
+        geo_json_path: str
+            Path to the geojson file to be turned into a filter
+    Returns
+    -------
+        geometry_filter: dict
+            dictionary geometry filter for the Planet API
+    """
+
+    with open('geo_json_path', 'r') as file:
+        geojson_data = json.load(file)
+
+    coords = []
+
+    coords.extend([coord for polygon in geojson_data['coordinates'] for coord in polygon])
+
+    geo_json_geometry = {
+        "type": "Polygon",
+        "coordinates": [
+            coords
+        ],
+    }
 
     # create the geometry filter for the Planet API
     geometry_filter = {
