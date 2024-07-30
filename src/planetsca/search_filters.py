@@ -1,4 +1,5 @@
 from shapely.geometry import shape
+
 import json
 
 
@@ -83,18 +84,18 @@ def make_geometry_filter_from_geojson(geo_json_path: str) -> dict:
             dictionary geometry filter for the Planet API
     """
 
-    with open('geo_json_path', 'r') as file:
+    with open("geo_json_path", "r") as file:
         geojson_data = json.load(file)
 
     coords = []
 
-    coords.extend([coord for polygon in geojson_data['coordinates'] for coord in polygon])
+    coords.extend(
+        [coord for polygon in geojson_data['coordinates'] for coord in polygon]
+    )
 
     geo_json_geometry = {
         "type": "Polygon",
-        "coordinates": [
-            coords
-        ],
+        "coordinates": [coords],
     }
 
     # create the geometry filter for the Planet API
