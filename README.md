@@ -150,13 +150,9 @@ Creating a VENV is recommended for this project as it ensures that there are no 
 1. Open Command Palette (Ctrl + Shift + P)
 2. Select Venv
 3. Select Desired Interpreter Path (I use 3.12.2, minimum version is 3.8)
-4. Notification should show up on the bottom right corner titled "Creating
-   environment (Show logs): Creating venv...
-5. The venv is set up and activated if you see " _Python Version_
-   (.'venv':venv)"
-6. _NOTE_ After setting up a venv once, VScode will automatically start up the
-   virtual environment alongside with VScode. There is no need to repeat these
-   steps unless you do not see step 5.
+4. Notification should show up on the bottom right corner titled "Creating environment (Show logs): Creating venv...
+5. The venv is set up and activated if you see " _Python Version_ (.'venv':venv)"
+6. _NOTE_ After setting up a venv once, VScode will automatically start up the virtual environment alongside with VScode. There is no need to repeat these steps unless you do not see step 5.
 
 ### Setting up a conda environment in the terminal:
 
@@ -166,3 +162,9 @@ Find detailed instructions [here](https://docs.conda.io/projects/conda/en/latest
 2. Create a new environment called "planetenv" with python version 3.8 or greater: `conda create -n planetenv python=3.9`
 3. Activate your new environment: `conda activate planetenv`
 4. Install planetsca from pip `pip install --extra-index-url https://test.pypi.org/simple planetsca`
+
+To use jupyter notebooks with this conda environment:
+
+1. Install ipykernel: `pip install --user ipykernel`
+2. Connect this environment to notebooks: `python -m ipykernel install --user --name=planetenv`
+3. When you start a jupyter notebook, you can now select the `planetenv` environment kernel
