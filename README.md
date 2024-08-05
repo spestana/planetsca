@@ -165,6 +165,7 @@ Find detailed instructions [here](https://docs.conda.io/projects/conda/en/latest
 
 To use jupyter notebooks with this conda environment:
 
-1. Install ipykernel: `pip install --user ipykernel`
-2. Connect this environment to notebooks: `python -m ipykernel install --user --name=planetenv`
-3. When you start a jupyter notebook, you can now select the `planetenv` environment kernel
+1. Activate your new environment: `conda activate planetenv`
+2. Install ipykernel: `pip install --user ipykernel`
+3. Connect this environment to notebooks: `python -m ipykernel install --user --name=planetenv`
+4. When you start a jupyter notebook, you can now select the `planetenv` environment kernel
