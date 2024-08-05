@@ -28,8 +28,9 @@ data access.
 
 ## Installation <a name="installation"></a>
 
-To install the python package, use(Ensure Python is downloaded, check bottom of
-README for VENV instructions):
+Python must already be installed in your current working environment. See the bottom of this README for instructions to create a new conda environment from the terminal, or with VENV in VSCode.
+
+To install the python package, use:
 
 ```bash
 pip install --extra-index-url https://test.pypi.org/simple planetsca
@@ -140,11 +141,11 @@ Please see the FUNCTIONS.md file for additional documentation of functions:
 
 <br></br>
 
-## Setting up a Virtual Environment (VENV) on VSCode <a name="venv"></a>
+## Setting up your environment
 
-### Creating a VENV is recommended for this project as it ensures that there are no package conflicts and that troubleshooting is much easier.
+### Setting up a Virtual Environment (VENV) on VSCode <a name="venv"></a>
 
-### Instructions are summarized from [here](https://code.visualstudio.com/docs/python/environments)
+Creating a VENV is recommended for this project as it ensures that there are no package conflicts and that troubleshooting is much easier. The following instructions are summarized from [here](https://code.visualstudio.com/docs/python/environments).
 
 1. Open Command Palette (Ctrl + Shift + P)
 2. Select Venv
@@ -156,3 +157,12 @@ Please see the FUNCTIONS.md file for additional documentation of functions:
 6. _NOTE_ After setting up a venv once, VScode will automatically start up the
    virtual environment alongside with VScode. There is no need to repeat these
    steps unless you do not see step 5.
+
+### Setting up a conda environment in the terminal:
+
+Find detailed instructions [here](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands).
+
+1. Open a terminal
+2. Create a new environment called "planetenv" with python version 3.8 or greater: `conda create -n planetenv python=3.9`
+3. Activate your new environment: `conda activate planetenv`
+4. Install planetsca from pip `pip install --extra-index-url https://test.pypi.org/simple planetsca`
