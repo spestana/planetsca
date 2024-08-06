@@ -28,7 +28,9 @@ data access.
 
 ## Installation <a name="installation"></a>
 
-Python must already be installed in your current working environment. See the bottom of this README for instructions to create a new conda environment from the terminal, or with VENV in VSCode.
+Python must already be installed in your current working environment. See the
+bottom of this README for instructions to create a new conda environment from
+the terminal, or with VENV in VSCode.
 
 To install the python package, use:
 
@@ -145,27 +147,39 @@ Please see the FUNCTIONS.md file for additional documentation of functions:
 
 ### Setting up a Virtual Environment (VENV) on VSCode <a name="venv"></a>
 
-Creating a VENV is recommended for this project as it ensures that there are no package conflicts and that troubleshooting is much easier. The following instructions are summarized from [here](https://code.visualstudio.com/docs/python/environments).
+Creating a VENV is recommended for this project as it ensures that there are no
+package conflicts and that troubleshooting is much easier. The following
+instructions are summarized from
+[here](https://code.visualstudio.com/docs/python/environments).
 
 1. Open Command Palette (Ctrl + Shift + P)
 2. Select Venv
 3. Select Desired Interpreter Path (I use 3.12.2, minimum version is 3.8)
-4. Notification should show up on the bottom right corner titled "Creating environment (Show logs): Creating venv...
-5. The venv is set up and activated if you see " _Python Version_ (.'venv':venv)"
-6. _NOTE_ After setting up a venv once, VScode will automatically start up the virtual environment alongside with VScode. There is no need to repeat these steps unless you do not see step 5.
+4. Notification should show up on the bottom right corner titled "Creating
+   environment (Show logs): Creating venv...
+5. The venv is set up and activated if you see " _Python Version_
+   (.'venv':venv)"
+6. _NOTE_ After setting up a venv once, VScode will automatically start up the
+   virtual environment alongside with VScode. There is no need to repeat these
+   steps unless you do not see step 5.
 
 ### Setting up a conda environment in the terminal:
 
-Find detailed instructions [here](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands).
+Find detailed instructions
+[here](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands).
 
 1. Open a terminal
-2. Create a new environment called "planetenv" with python version 3.8 or greater: `conda create -n planetenv python=3.9`
+2. Create a new environment called "planetenv" with python version 3.8 or
+   greater: `conda create -n planetenv python=3.9`
 3. Activate your new environment: `conda activate planetenv`
-4. Install planetsca from pip `pip install --extra-index-url https://test.pypi.org/simple planetsca`
+4. Install planetsca from pip
+   `pip install --extra-index-url https://test.pypi.org/simple planetsca`
 
 To use jupyter notebooks with this conda environment:
 
 1. Activate your new environment: `conda activate planetenv`
 2. Install ipykernel: `pip install --user ipykernel`
-3. Connect this environment to notebooks: `python -m ipykernel install --user --name=planetenv`
-4. When you start a jupyter notebook, you can now select the `planetenv` environment kernel
+3. Connect this environment to notebooks:
+   `python -m ipykernel install --user --name=planetenv`
+4. When you start a jupyter notebook, you can now select the `planetenv`
+   environment kernel
