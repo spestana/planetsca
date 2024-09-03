@@ -1,5 +1,6 @@
 import glob
 import os
+from typing import List, Union
 
 import joblib
 import numpy as np
@@ -8,7 +9,7 @@ import rasterio
 
 
 def run_sca_prediction(
-    planet_path: str,
+    planet_path: Union[str, List[str]],
     model_filepath: str,
     output_dirpath: str = "",
     nodata_flag: int = 9,
@@ -18,8 +19,8 @@ def run_sca_prediction(
 
     Parameters
     ----------
-        planet_path: str
-            file path to a single PlanetScope surface reflectance (SR) image, or a directory containing multiple SR images
+        planet_path: str or List[str]
+            file path to a single PlanetScope surface reflectance (SR) image, a list of file paths, or path to a directory containing multiple SR images
         model_filepath: str
             file path to a model joblib file
         output_dirpath: str
@@ -36,12 +37,20 @@ def run_sca_prediction(
             # create the output directory if it does not already exist
             os.mkdir(output_dirpath)
 
-    # if in_file_path is a directory, then find all images with 'SR' flag, meaning surface reflectance data
-    if os.path.isdir(planet_path):
-        file_list = glob.glob(planet_path + "/**/*SR*.tif", recursive=True)
-    # otherwise we are working with a single planet image
-    elif os.path.isfile(planet_path):
-        file_list = [planet_path]
+    # check if planet_path is a list
+    if isinstance(planet_path, list):
+        # make sure that each file exists
+        if all(os.path.isfile(filepath) for filepath in planet_path):
+            # then the file list is what was provided in planet_path
+            file_list = planet_path
+    # otherwise planet_path should be a string
+    elif isinstance(planet_path, str):
+        # if planet_path is a directory, then find all images with 'SR' flag, meaning surface reflectance data
+        if os.path.isdir(planet_path):
+            file_list = glob.glob(planet_path + "/**/*SR*.tif", recursive=True)
+        # otherwise we are working with a single planet image
+        elif os.path.isfile(planet_path):
+            file_list = [planet_path]
 
     # open the model
     model = joblib.load(model_filepath)
