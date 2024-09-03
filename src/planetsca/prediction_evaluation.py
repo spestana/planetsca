@@ -8,18 +8,21 @@ import rasterio
 
 
 def run_sca_prediction(
-    planet_file_path: str, model_file_path: str, out_dir: str = "", nodata_flag: int = 9
+    planet_path: str,
+    model_filepath: str,
+    output_dirpath: str = "",
+    nodata_flag: int = 9,
 ) -> None:
     """
     This function predicts binary snow cover from PlanetScope satellite images using a random forest model
 
     Parameters
     ----------
-        planet_file_path: str
-            file path to a PlanetScope image, or a directory containing multiple images
-        model_file_path: str
+        planet_path: str
+            file path to a single PlanetScope surface reflectance (SR) image, or a directory containing multiple SR images
+        model_filepath: str
             file path to a model joblib file
-        out_dir: str
+        output_dirpath: str
             the directory where output snow cover images will be stored
         nodata_flag: int
             the value used to represent no data in the predicted snow cover image, default value is 9
@@ -27,21 +30,21 @@ def run_sca_prediction(
     """
 
     # if output directory is not empty
-    if out_dir != "":
+    if output_dirpath != "":
         # check if the directory already exists
-        if not os.path.exists(out_dir):
+        if not os.path.exists(output_dirpath):
             # create the output directory if it does not already exist
-            os.mkdir(out_dir)
+            os.mkdir(output_dirpath)
 
     # if in_file_path is a directory, then find all images with 'SR' flag, meaning surface reflectance data
-    if os.path.isdir(planet_file_path):
-        file_list = glob.glob(planet_file_path + "/**/*SR*.tif", recursive=True)
+    if os.path.isdir(planet_path):
+        file_list = glob.glob(planet_path + "/**/*SR*.tif", recursive=True)
     # otherwise we are working with a single planet image
-    elif os.path.isfile(planet_file_path):
-        file_list = [planet_file_path]
+    elif os.path.isfile(planet_path):
+        file_list = [planet_path]
 
     # open the model
-    model = joblib.load(model_file_path)
+    model = joblib.load(model_filepath)
 
     # open and apply the model to each image in the list
     for f in file_list:
@@ -82,7 +85,7 @@ def run_sca_prediction(
 
         # save the resulting SCA image out as a geotiff
         file_out = os.path.join(
-            out_dir, os.path.splitext(os.path.basename(f))[0] + "_SCA.tif"
+            output_dirpath, os.path.splitext(os.path.basename(f))[0] + "_SCA.tif"
         )
         print("Save SCA map to: ".format(), file_out)
         with rasterio.open(
