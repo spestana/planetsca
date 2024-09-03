@@ -138,8 +138,8 @@ pe.single_image_evaluation(dir_raster, dir_model, dir_out)
 
 ## Functions <a name="functions"></a>
 
-Please see the FUNCTIONS.md file for additional documentation of functions:
-[FUNCTIONS.md](https://github.com/DSHydro/planetsca/blob/main/FUNCTIONS.md)
+Please see the [website](https://dshydro.github.io/planetsca/) for more
+information and documentation on functions.
 
 <br></br>
 
