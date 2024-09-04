@@ -1,11 +1,12 @@
 import json
+from typing import List, Literal
 
 from shapely.geometry import shape
 
 
 def make_domain_geometry_from_bounds(bounds: list[float]):
     """
-    Helper - Make a shapely geometry polygon from from longitude and latitude bounds (a rectangular area)
+    Make a shapely geometry polygon from from longitude and latitude bounds (a rectangular area)
 
     Parameters
     ----------
@@ -70,13 +71,13 @@ def make_geometry_filter_from_bounds(bounds: list[float]) -> dict:
     return geometry_filter
 
 
-def make_geometry_filter_from_geojson(geo_json_path: str) -> dict:
+def make_geometry_filter_from_geojson(geojson_filepath: str) -> dict:
     """
     Make a geometry filter dictionary for the Planet API from a geojson file path
 
     Parameters
     ----------
-        geo_json_path: str
+        geojson_filepath: str
             Path to the geojson file to be turned into a filter
     Returns
     -------
@@ -84,7 +85,7 @@ def make_geometry_filter_from_geojson(geo_json_path: str) -> dict:
             dictionary geometry filter for the Planet API
     """
 
-    with open("geo_json_path", "r") as file:
+    with open(geojson_filepath, "r") as file:
         geojson_data = json.load(file)
 
     coords = []
@@ -159,43 +160,29 @@ def make_cloud_cover_filter(lte: float, gte: float = 0) -> dict:
     return cloud_cover_filter
 
 
-def make_AndFilter(filters: list[dict]) -> dict:
+def combine_filters(
+    filters: List[dict], combine_with: Literal["and", "or"] = "and"
+) -> dict:
     """
-    Make a filter by combining two or more filters with an AND operator
+    Combine two or more filters with either an AND, or an OR operator
 
     Parameters
     ----------
-        filters: list[dict]
+        filters: List[dict]
             list of filters to combine with AND
+        combine_with:  Literal['and', 'or']
+            specify whether to combine filters with an AND, or an OR operator (defaults to AND)
     Returns
     -------
         filter: dict
             combined filters for the Planet API
     """
-
+    if combine_with == "and":
+        type = "AndFilter"
+    elif combine_with == "or":
+        type = "OrFilter"
     filter = {
-        "type": "AndFilter",
-        "config": filters,
-    }
-    return filter
-
-
-def make_OrFilter(filters: list[dict]) -> dict:
-    """
-    Make a filter by combining two or more filters with an OR operator
-
-    Parameters
-    ----------
-        filters: list[dict]
-            list of filters to combine with OR
-    Returns
-    -------
-        filter: dict
-            combined filters for the Planet API
-    """
-
-    filter = {
-        "type": "OrFilter",
+        "type": type,
         "config": filters,
     }
     return filter

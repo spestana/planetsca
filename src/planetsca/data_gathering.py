@@ -110,7 +110,7 @@ def order_now(payload, apiKey):
         print(f"Failed with Exception code : {response.status_code}")
 
 
-def download_results(order_url, apiKey, folder, overwrite=False):
+def download_results(order_url, apiKey, out_dirpath, overwrite=False):
     """
     Helper function for downloading the ordered data from Planet, makes a download request every 60 seconds until data is ready to download
 
@@ -120,8 +120,8 @@ def download_results(order_url, apiKey, folder, overwrite=False):
             Order urls created from prepare_submit_orders()
         apiKey: str
             Planet API key
-        folder: str
-            folder path for output
+        out_dirpath: str
+            Path to output directory
     """
 
     print("Attempting to download")  # Tell user what to do
@@ -138,7 +138,7 @@ def download_results(order_url, apiKey, folder, overwrite=False):
                 print("{} items to download".format(len(results_urls)))
 
                 for url, name in zip(results_urls, results_names):
-                    path = pathlib.Path(os.path.join(folder, name))
+                    path = pathlib.Path(os.path.join(out_dirpath, name))
 
                     if overwrite or not path.exists():
                         print("downloading {} to {}".format(name, path))
@@ -296,7 +296,7 @@ def save_to_csv(order_urls):
     order_urls.to_csv("urlSaver.csv", index=None)  # save all URLs
 
 
-def download_ready_orders(order_urls, apiKey, out_direc):
+def download_ready_orders(order_urls, apiKey, out_dirpath):
     """
     Downloads ready orders from the Planet API, if "data not ready yet" waits 60 seconds before making another request
 
@@ -306,18 +306,22 @@ def download_ready_orders(order_urls, apiKey, out_direc):
             Order urls with geometry IDs and indices
         apiKey: str
             Planet API key
-        out_direc: str
-            File path to output directory
+        out_dirpath: str
+            Path to output directory
     """
 
     for url in order_urls.itertuples():
         print(url.index, url.order_url)
-        print("start downloading data to", out_direc + url.ID_geom)
+        print("start downloading data to", out_dirpath + url.ID_geom)
         if url.order_url is not None:
             try:
                 ~np.isnan(url.order_url)
             except Exception:
-                download_results(url.order_url, apiKey, folder=out_direc + url.ID_geom)
+                download_results(
+                    url.order_url,
+                    apiKey,
+                    out_dirpath=os.path.join(out_dirpath, url.ID_geom),
+                )
         # break
 
 
