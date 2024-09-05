@@ -1,8 +1,9 @@
-from . import data_gathering, data_preparation, model_training, prediction_evaluation
+from . import data_preparation, download, model_training, prediction_evaluation, search
 
 __all__ = [
-    "data_gathering",
+    "download",
     "data_preparation",
     "model_training",
     "prediction_evaluation",
+    "search",
 ]
