@@ -28,8 +28,11 @@ data access.
 
 ## Installation <a name="installation"></a>
 
-To install the python package, use(Ensure Python is downloaded, check bottom of
-README for VENV instructions):
+Python must already be installed in your current working environment. See the
+bottom of this README for instructions to create a new conda environment from
+the terminal, or with VENV in VSCode.
+
+To install the python package, use:
 
 ```bash
 pip install --extra-index-url https://test.pypi.org/simple planetsca
@@ -75,76 +78,125 @@ from planetsca import prediction_evaluation as pe
 import numpy as np
 ```
 
-2. Set Variables and folder locations
+2a. Data Gathering Variable Setup
 
 ```
-domainID = '551'
 # enter the Planet user API key
+domain = '551'
 apiKey = '_________'
 item_type = "PSScene"
 asset_type = "ortho_analytic_4b_sr"
 bundle_type = "analytic_sr_udm2"
-```
-
-3. Data Gathering
-
-```
-
-# data download location
 out_direc = '_________' #Replace with folder containing environment
+```
+
+2b. Data Gathering Path 1
+
+```
+# data download location
 domain_geometry = dg.domain_shape()
 print(domain_geometry)
-result = dg.api_search(item_type, apiKey)
-geojson_data, gdf = dg.downloadable_PlanetIDs(result, domain_geometry)
-id_list = dg.id_gemoetry_lists(geojson_data, gdf)
-order_urls = dg.submit_orders(id_list, item_type, bundle_type, apiKey)
+
+result = dg.search_API_request_object(item_type, apiKey, domain)
+id_list, geom_list = dg.prep_ID_geometry_lists(result, domain)
+order_urls = dg.prepare_submit_orders(id_list, item_type, bundle_type, apiKey, domain)
 dg.save_data_to_csv(order_urls)
-dg.download_orders(order_urls, out_direc, apiKey)
+dg.download_ready_orders(order_urls, out_direc, apiKey)
 #dg.display_image(fp)
 ```
 
-4. Data Preparation
+2c. Data Gathering Path 2
 
 ```
-df_train = dp.data_labeling("","","", "", 'sample_174k.csv')
-dir_model = 'random_forest_20240116_binary_174K.joblib'
-dir_score = 'random_forest_20240116_binary_174K_scores.csv'
+dg.retrieve_dataset(out_direc, file)
 ```
 
-5a. Model Training
+3a. Data Preparation Variable Setup
 
 ```
-mt.train_model(dir_model, dir_score, 10, 10, 4, 1, df_train)
+#Set up Paths
+dir_ROI = ""
+dir_raster = ""
+dir_ROIraster = ""
+dir_samples_root = ""
+dir_samples = ""
 ```
 
-5b. Retrieve Pre-Made Model from Hugging Faces
+3b. Data Preparation Path 1
 
 ```
-mt.retrieve_model(out_direc):
+df_train = data_training_existing(dir_samples)
+```
+
+3c. Data Preparation Path 2
+
+```
+data_training_new(dir_ROI, dir_raster, dir_ROIraster, dir_samples_root)
+```
+
+4a. Model Training Variable Setup
+
+```
+#Setup Paths
+dir_model = ""
+dir_score = ""
+
+#Model Parameters
+n_estimators = 
+max_dpeth = 
+max_features =
+random_state =
+n_splits =
+n_repeats =
+df_train = 
+```
+
+4b. Model Training Path 1
+
+```
+mt.train_model(dir_model, dir_score, n_estimators, max_depth, max_features, random_state, n_splits, n_repeats, df_train)
+```
+
+4c. Model Training Path 2
+
+```
+mt.retrieve_model(out_direc, file)
+```
+
+5a. Prediction Evaluation Variable Setup
+
+```
+#Set up directory paths of file locations
+dir_raster = ""
+dir_out = ""
+model = ""
+
+nodata_flag = 9
 ```
 
 6. Prediction Evaluation
 
 ```
-dir_raster = '20180528_181110_1025_3B_AnalyticMS_SR_clip.tiff'
-dir_out = 'SCA'
-pe.single_image_evaluation(dir_raster, dir_model, dir_out)
+pe.run_sca_prediction(dir_raster, dir_out, nodata_flag, model)
 ```
 
 <br></br>
 
 ## Functions <a name="functions"></a>
 
-Please see the FUNCTIONS.md file for additional documentation of functions:
-[FUNCTIONS.md](https://github.com/DSHydro/planetsca/blob/main/FUNCTIONS.md)
+Please see the [website](https://dshydro.github.io/planetsca/) for more
+information and documentation on functions.
 
 <br></br>
 
-## Setting up a Virtual Environment (VENV) on VSCode <a name="venv"></a>
+## Setting up your environment
 
-### Creating a VENV is recommended for this project as it ensures that there are no package conflicts and that troubleshooting is much easier.
+### Setting up a Virtual Environment (VENV) on VSCode <a name="venv"></a>
 
-### Instructions are summarized from [here](https://code.visualstudio.com/docs/python/environments)
+Creating a VENV is recommended for this project as it ensures that there are no
+package conflicts and that troubleshooting is much easier. The following
+instructions are summarized from
+[here](https://code.visualstudio.com/docs/python/environments).
 
 1. Open Command Palette (Ctrl + Shift + P)
 2. Select Venv
@@ -156,3 +208,24 @@ Please see the FUNCTIONS.md file for additional documentation of functions:
 6. _NOTE_ After setting up a venv once, VScode will automatically start up the
    virtual environment alongside with VScode. There is no need to repeat these
    steps unless you do not see step 5.
+
+### Setting up a conda environment in the terminal:
+
+Find detailed instructions
+[here](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands).
+
+1. Open a terminal
+2. Create a new environment called "planetenv" with python version 3.8 or
+   greater: `conda create -n planetenv python=3.9`
+3. Activate your new environment: `conda activate planetenv`
+4. Install planetsca from pip
+   `pip install --extra-index-url https://test.pypi.org/simple planetsca`
+
+To use jupyter notebooks with this conda environment:
+
+1. Activate your new environment: `conda activate planetenv`
+2. Install ipykernel: `pip install --user ipykernel`
+3. Connect this environment to notebooks:
+   `python -m ipykernel install --user --name=planetenv`
+4. When you start a jupyter notebook, you can now select the `planetenv`
+   environment kernel
