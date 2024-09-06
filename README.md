@@ -45,29 +45,27 @@ import planetsca as ps
 
 ```
 api_key = '' # your Planet user API key
-item_type = "PSScene"
-asset_type = "ortho_analytic_4b_sr"
-bundle_type = "analytic_sr_udm2" # see bundle types here: https://developers.planet.com/apis/orders/product-bundles-reference/
 
-# create a filter to search within specified geometry, date range, and with a cloud filter
-filter = ps.search.combine_filters([
-                                    ps.search.make_date_range_filter("2024-02-14T00:00:00.000Z", "2024-02-17T00:00:00.000Z"), # filter images acquired in a certain date range
-                                    ps.search.make_geometry_filter_from_geojson('grandmesa.geojson'), # define area of interest from a geojson file
-                                    ps.search.make_cloud_cover_filter(0.05) # filter any images which are more than 5% clouds
-                                    ])
+# Set up a filter to search a specific time range and region, and to avoid cloudy images:
+date_range_filter = ps.search.make_date_range_filter("2024-01-14T00:00:00.000Z", "2024-01-17T00:00:00.000Z")
+geometry_filter = ps.search.make_geometry_filter_from_bounds([-105.886, 40.519, -105.872, 40.529])
+#geometry_filter = ps.search.make_geometry_filter_from_geojson('my_study_area.geojson') # or use a geojson file
+cloud_filter = ps.search.make_cloud_cover_filter(0.05)
+filter = ps.search.combine_filters([date_range_filter, geometry_filter, cloud_filter])
+
 # search, results are returned as a geopandas.GeoDataFrame
-search_results_gdf = ps.search.search(item_type, filter, api_key)
+search_results_gdf = ps.search.search(api_key, filter)
 ```
 
 3. Order and download data
 
 ```
 # submit an order using image IDs from the search results
-id_list = gdf.id.to_list()
-order_url = ps.download.order(id_list, item_type, bundle_type, filter, api_key)
+id_list = search_results_gdf.id.to_list()
+order_url = ps.download.order(api_key, id_list, filter)
 
 # download
-ps.download.download(order_url, api_key, out_dirpath='./output_directory/')
+ps.download.download(api_key, order_url, out_dirpath='./output_directory')
 ```
 
 4. Data Preparation Variable Setup
