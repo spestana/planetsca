@@ -8,18 +8,18 @@ from shapely.geometry import shape
 from planetsca import simplify_aoi
 
 
-def search(item_type, filter, api_key):
+def search(api_key: str, filter: dict, item_type: str = "PSScene") -> gpd.GeoDataFrame:
     """
     Sends a request to the Planet API to find if data is available
 
     Parameters
     ----------
-        item_type: str
-            Class of spacecraft and/or processing level of an item from https://developers.planet.com/docs/apis/data/items-assets/
-        filter: dict
-            Dictionary containing data filter information
         api_key: str
             Planet API key
+        filter: dict
+            Dictionary containing data filter information
+        item_type: str
+            Class of spacecraft and/or processing level of an item, defaults to PSScene. See https://developers.planet.com/docs/apis/data/items-assets/
 
     Returns
     -------
@@ -48,7 +48,7 @@ def search(item_type, filter, api_key):
         return None
 
 
-def response_to_gdf(response, filter):
+def response_to_gdf(response: requests.Response, filter: dict):
     """
     Creates geodataframe of image IDs and other information from a Planet API response
 

@@ -12,23 +12,27 @@ from planetsca import search
 
 
 def order(
-    id_list: List[str], item_type: str, bundle_type: str, filter: dict, api_key: str
+    api_key: str,
+    id_list: List[str],
+    filter: dict,
+    item_type: str = "PSScene",
+    bundle_type: str = "analytic_sr_udm2",
 ) -> str:
     """
     Builds payload for Planet API and submits an order.
 
     Parameters
     ----------
-        id_list: List[str]
-            Item id that contains date and location information
-        item_type: str
-            Class of spacecraft and/or processing level of an item https://developers.planet.com/docs/apis/data/items-assets/
-        bundle_type: str
-            Groups of assets for an item and contain metadata https://developers.planet.com/apis/orders/product-bundles-reference/
-        filter: dict
-            Dictionary containing data filter information
         api_key: str
             Planet API key
+        id_list: List[str]
+            Item id that contains date and location information
+        filter: dict
+            Dictionary containing data filter information
+        item_type: str
+            Class of spacecraft and/or processing level of an item, defaults to PSScene. See https://developers.planet.com/docs/apis/data/items-assets/
+        bundle_type: str
+            Groups of assets for an item and contain metadata, defaults to analytic_sr_udm2. See https://developers.planet.com/apis/orders/product-bundles-reference/#surface-reflectance-4b
 
     Returns
     -------
@@ -39,31 +43,33 @@ def order(
     # build payload
     payload = build_payload(
         id_list,
+        search.get_filter(filter, "GeometryFilter")["config"]["coordinates"],
         item_type,
         bundle_type,
-        search.get_filter(filter, "GeometryFilter")["config"]["coordinates"],
     )
 
     # submit payload and get order url
-    order_url = order_now(payload, api_key)
+    order_url = order_now(api_key, payload)
 
     return order_url
 
 
-def build_payload(item_ids, item_type, bundle_type, aoi_coordinates):
+def build_payload(
+    item_ids: List[str], aoi_coordinates: List[float], item_type: str, bundle_type: str
+) -> dict:
     """
     Helper function building payload for the Planet API
 
     Parameters
     ----------
-        item_ids: str
+        item_ids: List[str]
             Item id that contains date and location information
-        item_type: str
-            Class of spacecraft and/or processing level of an item https://developers.planet.com/docs/apis/data/items-assets/
-        bundle_type: str
-            Groups of assets for an item and contain metadata https://developers.planet.com/apis/orders/product-bundles-reference/
-        aoi_coordinates: list[float]
+        aoi_coordinates: List[float]
             Area of interest coordinates
+        item_type: str
+            Class of spacecraft and/or processing level of an item, defaults to PSScene. See https://developers.planet.com/docs/apis/data/items-assets/
+        bundle_type: str
+            Groups of assets for an item and contain metadata, defaults to analytic_sr_udm2. See https://developers.planet.com/apis/orders/product-bundles-reference/#surface-reflectance-4b
 
     Returns
     -------
@@ -72,7 +78,7 @@ def build_payload(item_ids, item_type, bundle_type, aoi_coordinates):
     """
 
     payload = {
-        "name": item_ids[0],
+        "name": item_ids[0],  # use the first item id as a name for this order payload
         "source_type": "scenes",
         "products": [
             {
@@ -88,16 +94,16 @@ def build_payload(item_ids, item_type, bundle_type, aoi_coordinates):
     return payload
 
 
-def order_now(payload, api_key):
+def order_now(api_key, payload):
     """
     Helper function for ordering data from Planet
 
     Parameters
     ----------
-        payload: dict
-            Dictionary containing all necessary information for the Planet API
         api_key: str
             Planet API key
+        payload: dict
+            Dictionary containing all necessary information for the Planet API
 
     Returns
     ----------
@@ -131,18 +137,22 @@ def order_now(payload, api_key):
         return response
 
 
-def download(order_url, api_key, out_dirpath, overwrite=False):
+def download(
+    api_key: str, order_url: str, out_dirpath: str, overwrite: bool = False
+) -> None:
     """
     Helper function for downloading the ordered data from Planet, makes a download request every 60 seconds until data is ready to download
 
     Parameters
     ----------
-        order_url: str
-            Order urls created from prepare_submit_orders()
         api_key: str
             Planet API key
+        order_url: str
+            Order urls created from prepare_submit_orders()
         out_dirpath: str
             Path to output directory
+        overwrite: bool
+            Whether or not to overwrite existing files, defaults to False
 
     Returns
     ----------
