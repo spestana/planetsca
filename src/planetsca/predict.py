@@ -8,12 +8,12 @@ import pandas as pd
 import rasterio
 
 
-def run_sca_prediction(
+def predict_sca(
     planet_path: Union[str, List[str]],
     model_filepath: str,
     output_dirpath: str = "",
     nodata_flag: int = 9,
-) -> None:
+) -> Union[str, List[str]]:
     """
     This function predicts binary snow cover from PlanetScope satellite images using a random forest model
 
@@ -28,6 +28,10 @@ def run_sca_prediction(
         nodata_flag: int
             the value used to represent no data in the predicted snow cover image, default value is 9
 
+    Returns
+    ----------
+        sca_image_paths: List[str]
+            list of file paths to the SCA images produced
     """
 
     # if output directory is not empty
@@ -54,6 +58,9 @@ def run_sca_prediction(
 
     # open the model
     model = joblib.load(model_filepath)
+
+    # make an empty list to populate with finished sca image filepaths
+    sca_image_paths = []
 
     # open and apply the model to each image in the list
     for f in file_list:
@@ -111,4 +118,6 @@ def run_sca_prediction(
         ) as dst:
             dst.write(img_prediction, indexes=1, masked=True)
 
-    return None
+        sca_image_paths.append(file_out)
+
+    return sca_image_paths
