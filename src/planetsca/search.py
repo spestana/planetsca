@@ -83,7 +83,7 @@ def response_to_gdf(response: requests.Response, filter: dict):
     return gdf
 
 
-def make_domain_geometry_from_bounds(bounds: list[float]):
+def make_domain_geometry_from_bounds(bounds: List[float]):
     """
     Make a shapely geometry polygon from from longitude and latitude bounds (a rectangular area)
 
@@ -121,7 +121,7 @@ def make_domain_geometry_from_bounds(bounds: list[float]):
     return geo_json_geometry, domain_geometry
 
 
-def make_geometry_filter_from_bounds(bounds: list[float]) -> dict:
+def make_geometry_filter_from_bounds(bounds: List[float]) -> dict:
     """
     Make a geometry filter dictionary for the Planet API from longitude and latitude bounds (a rectangular search area)
 
