@@ -1,5 +1,6 @@
 import time
 import warnings
+from typing import Optional
 
 import joblib
 import matplotlib.pyplot as plt
@@ -12,29 +13,44 @@ warnings.filterwarnings("ignore")
 
 
 def train_model(
-    dir_model,
-    dir_score,
-    n_estimators,
-    max_depth,
-    max_features,
-    random_state,
-    n_splits,
-    n_repeats,
-    df_train,
+    df_train: pd.DataFrame,
+    new_model_filepath: str,
+    new_model_score_filepath: str,
+    n_estimators: int = 10,
+    max_depth: int = 10,
+    max_features: int = 4,
+    random_state: Optional[int] = None,
+    n_splits: int = 2,
+    n_repeats: int = 2,
 ):
     """
-    Trains and creates a model with custom parameters
+    Trains and creates a new model with custom parameters
 
-    Parameters:
-        dir_model: String path to save the model
-        dir_score: String path to save scores
-        n_estimators: Number of trees in the forest
-        max_depth: Maximum depth of the tree
-        max_features: Number of features to consider when looking for the best split
-        random_state: Seed to ensure reproducibility
-        n_splits: Number of folds in the cross-validation
-        n_repeats: Number of times cross-validator needs to be repeated
-        df_train: Dataframe containing training data
+    Parameters
+    ----------
+        df_train: pd.DataFrame
+            Dataframe containing training data, must have feature columns 'blue', 'green', 'red', 'nir' and target column 'label'
+        new_model_filepath: str
+            Filepath to save the model as a joblib file
+        new_model_score_filepath: str
+            Filepath to save the model score information as a csv file
+        n_estimators: int
+            Number of trees in the forest, defaults to 10
+        max_depth: int
+            Maximum depth of the tree, defaults to 10
+        max_features: int
+            Number of features to consider when looking for the best split, defaults to 4
+        random_state: int
+            Seed to ensure reproducibility, defaults to None
+        n_splits: int
+            Number of folds in the cross-validation, defaults to 2
+        n_repeats: int
+            Number of times cross-validator needs to be repeated, defaults to 2
+
+    Returns
+    -------
+        None
+
     """
 
     starttime = time.process_time()
@@ -84,14 +100,15 @@ def train_model(
     # fit model with all observations
     model.fit(X, y)
     # save model
-    joblib.dump(model, dir_model)
+    joblib.dump(model, new_model_filepath)
+    print(f"Model saved to {new_model_filepath}")
     # save accuracy
     scores = pd.DataFrame()
     scores["accuracy"] = n_accuracy
     scores["f1"] = n_f1
     scores["balanced_accuracy"] = n_balanced_accuracy
-    scores.to_csv(dir_score, index=False)
-
+    scores.to_csv(new_model_score_filepath, index=False)
+    print(f"Model scores saved to {new_model_score_filepath}")
     print("Total time used:".format(), round(time.process_time() - starttime, 1))
 
 
