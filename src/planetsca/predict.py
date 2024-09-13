@@ -6,32 +6,34 @@ import joblib
 import numpy as np
 import pandas as pd
 import rasterio
+from sklearn.ensemble import RandomForestClassifier
 
 
-def predict_sca(
+def check_inputs(
     planet_path: Union[str, List[str]],
-    model_filepath: str,
+    model: Union[str, RandomForestClassifier],
     output_dirpath: str = "",
-    nodata_flag: int = 9,
-) -> Union[str, List[str]]:
+) -> int:
     """
-    This function predicts binary snow cover from PlanetScope satellite images using a random forest model
+    Check the inputs for the predict_sca function
 
     Parameters
     ----------
         planet_path: str or List[str]
             file path to a single PlanetScope surface reflectance (SR) image, a list of file paths, or path to a directory containing multiple SR images
-        model_filepath: str
-            file path to a model joblib file
+        model: Union[str, RandomForestClassifier]
+            file path to a model joblib file, or an sklearn.ensemble RandomForestClassifier model object
         output_dirpath: str
             the directory where output snow cover images will be stored
-        nodata_flag: int
-            the value used to represent no data in the predicted snow cover image, default value is 9
 
     Returns
     ----------
-        sca_image_paths: List[str]
-            list of file paths to the SCA images produced
+        file_list: List[str]
+            a list of filepaths to PlanetScope surface reflectance (SR) images
+        model: RandomForestClassifier
+            an sklearn.ensemble RandomForestClassifier model object
+        output_dirpath: str
+            the directory where output snow cover images will be stored
     """
 
     # if output directory is not empty
@@ -56,8 +58,44 @@ def predict_sca(
         elif os.path.isfile(planet_path):
             file_list = [planet_path]
 
-    # open the model
-    model = joblib.load(model_filepath)
+    # if provided with a filepath to a model file
+    if isinstance(model, str) and os.path.isfile(model):
+        # open the model
+        print(f"Reading model from file: {model}")
+        model = joblib.load(model)
+    # otherwise "model" is already our RandomForestClassifier model
+
+    return file_list, model, output_dirpath
+
+
+def predict_sca(
+    planet_path: Union[str, List[str]],
+    model: Union[str, RandomForestClassifier],
+    output_dirpath: str = "",
+    nodata_flag: int = 9,
+) -> Union[str, List[str]]:
+    """
+    This function predicts binary snow cover from PlanetScope satellite images using a random forest model
+
+    Parameters
+    ----------
+        planet_path: str or List[str]
+            file path to a single PlanetScope surface reflectance (SR) image, a list of file paths, or path to a directory containing multiple SR images
+        model: Union[str, RandomForestClassifier]
+            file path to a model joblib file, or an sklearn.ensemble RandomForestClassifier model object
+        output_dirpath: str
+            the directory where output snow cover images will be stored
+        nodata_flag: int
+            the value used to represent no data in the predicted snow cover image, default value is 9
+
+    Returns
+    ----------
+        sca_image_paths: List[str]
+            list of file paths to the SCA images produced
+    """
+
+    #
+    file_list, model, output_dirpath = check_inputs(planet_path, model, output_dirpath)
 
     # make an empty list to populate with finished sca image filepaths
     sca_image_paths = []
