@@ -38,4 +38,6 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "furo"
-html_static_path = ["_static"]
+html_static_path = [
+    "_static"
+]  # this may generate a warning: WARNING: html_static_path entry '_static' does not exist, if we don't have anything in _static

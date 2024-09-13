@@ -14,9 +14,9 @@ Welcome to PlanetSCA's documentation
 
    installation
    running
-   data_gathering
-   data_preparation
-   model_training
-   prediction_evaluation
+   search
+   download
+   train
+   predict
    simplify_aoi
-   search_filters
+   training_data
