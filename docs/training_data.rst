@@ -99,21 +99,21 @@ Create training data with planetsca
 
 Finally, you can use the planetsca library to create the training data.
 
-```python
-# import the planetsca train module
-from planetsca import train
+.. code-block::
+    # import the planetsca train module
+    from planetsca import train
 
-# provide filepaths to geojson and sample Planet Scope image
-labeled_polygons_filepath = "planetsca_training_data_polygons.geojson"
-training_image_filepath = "20240116_170700_24_24b0_3B_AnalyticMS_SR_clip.tif"
+    # provide filepaths to geojson and sample Planet Scope image
+    labeled_polygons_filepath = "planetsca_training_data_polygons.geojson"
+    training_image_filepath = "20240116_170700_24_24b0_3B_AnalyticMS_SR_clip.tif"
 
-# create the training data, also save it to a csv file
-training_data_df = train.data_training_new(
-    labeled_polygons_filepath,
-    training_image_filepath,
-    training_data_filepath="my_training_data.csv",
-)
-```
+    # create the training data, also save it to a csv file
+    training_data_df = train.data_training_new(
+        labeled_polygons_filepath,
+        training_image_filepath,
+        training_data_filepath="my_training_data.csv",
+    )
+
 
 See the demo Jupyter Notebooks and planetsca documentation for further details.
 
