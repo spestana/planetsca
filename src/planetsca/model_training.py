@@ -5,7 +5,6 @@ from typing import Optional
 import joblib
 import matplotlib.pyplot as plt
 import pandas as pd
-from huggingface_hub import hf_hub_download
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RepeatedStratifiedKFold, cross_val_score
 
@@ -22,7 +21,7 @@ def train_model(
     random_state: Optional[int] = None,
     n_splits: int = 2,
     n_repeats: int = 2,
-):
+) -> RandomForestClassifier:
     """
     Trains and creates a new model with custom parameters
 
@@ -49,8 +48,8 @@ def train_model(
 
     Returns
     -------
-        None
-
+        model: RandomForestClassifier
+            The newly trained model
     """
 
     starttime = time.process_time()
@@ -111,18 +110,4 @@ def train_model(
     print(f"Model scores saved to {new_model_score_filepath}")
     print("Total time used:".format(), round(time.process_time() - starttime, 1))
 
-
-def retrieve_model(out_direc, file):
-    """
-    Downloads pre-trained models from hugging faces
-
-    Parameters:
-        out_direc: String file path to output directory
-        file: String file name to download
-    """
-
-    hf_hub_download(
-        repo_id="geo-smart/planetsca_models",
-        filename=file,
-        local_dir=out_direc,
-    )
+    return model
