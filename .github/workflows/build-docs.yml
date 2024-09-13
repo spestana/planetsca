@@ -27,6 +27,7 @@ jobs:
           pip install --extra-index-url https://test.pypi.org/simple planetsca
           pip install sphinx
           pip install furo
+          pip install fiona
 
       - name: Build Sphinx documentation
         run: |
