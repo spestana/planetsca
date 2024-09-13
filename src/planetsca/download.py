@@ -214,3 +214,19 @@ def retrieve_dataset(out_direc, file):
         filename=file,
         local_dir=out_direc,
     )
+
+
+def retrieve_model(out_direc, file):
+    """
+    Downloads pre-trained models from hugging faces
+
+    Parameters:
+        out_direc: String file path to output directory
+        file: String file name to download
+    """
+
+    hf_hub_download(
+        repo_id="geo-smart/planetsca_models",
+        filename=file,
+        local_dir=out_direc,
+    )
