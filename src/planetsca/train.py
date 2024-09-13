@@ -16,20 +16,22 @@ from sklearn.model_selection import RepeatedStratifiedKFold, cross_val_score
 warnings.filterwarnings("ignore")
 
 
-def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output):
+def vector_rasterize(
+    labeled_polygons_filepath: str,
+    training_image_filepath: str,
+    rasterized_mask_output_filepath: str = None,
+):
     """
     Helper function for converting vector file to a raster file
 
     Parameters
     ----------
-        dir_vector: str
-            File path to vector file
-        dir_raster: str
-            File path to Planet Image
-        dir_out: str
-            File path to output raster file
-        flag_output: bool
-            Flag for allowing overwriting of output file
+        labeled_polygons_filepath: str
+            File path to shapefile or geojson file with labeled polygons
+        training_image_filepath: str
+            File path to Planet Scope image
+        rasterized_mask_output_filepath: Optional[str]
+            Optional: file path to output the rasterized labeled polygons to a geotiff file (defaults to None)
 
     Returns
     -------
@@ -37,12 +39,12 @@ def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output):
             Rasterized version of the vector file
     """
 
-    vector = gpd.read_file(dir_vector)
+    vector = gpd.read_file(labeled_polygons_filepath)
     # Get list of geometries for all features in vector file
     list(vector.geometry)
 
     # Open example raster
-    raster = rasterio.open(dir_raster)
+    raster = rasterio.open(training_image_filepath)
 
     # reproject vector to raster
     vector = vector.to_crs(raster.crs)
@@ -63,9 +65,12 @@ def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output):
         dtype=np.float32,
     )
 
-    if flag_output:
+    if isinstance(rasterized_mask_output_filepath, str):
+        print(
+            f"Saving rasterized labeled polygons to: {rasterized_mask_output_filepath}"
+        )
         with rasterio.open(
-            dir_out,
+            rasterized_mask_output_filepath,
             "w",
             driver="GTiff",
             transform=raster.transform,
@@ -78,55 +83,63 @@ def vector_rasterize(dir_vector, dir_raster, dir_out, flag_output):
     return rasterized
 
 
-def data_training_new(dir_ROI, dir_raster, dir_ROIraster, dir_samples_root):
+def data_training_new(
+    labeled_polygons_filepath: str,
+    training_image_filepath: str,
+    training_data_filepath: Optional[str] = None,
+    rasterized_mask_output_filepath: Optional[str] = None,
+    ndvi: Optional[bool] = False,
+):
     """
     Creates training data from scratch
 
     Parameters
     ----------
-        dir_ROI: str
-            Directory path to regions of interest
-        dir_raster: str
-            Directory to Planet image for training
-        dir_ROIraster: str
-            Directory path to a ROI converted to shape mask
-        dir_samples_root: str
-            Directory path to csv of training data extracted from images
+        labeled_polygons_filepath: str
+            File path to shapefile or geojson file with labeled polygons
+        training_image_filepath: str
+            File path to Planet Scope image
+        training_data_filepath: Optional[str]
+            Optional: file path to output training data dataframe as a csv file (defaults to None)
+        rasterized_mask_output_filepath: Optional[str]
+            Optional: file path to output the rasterized labeled polygons to a geotiff file (defaults to None)
+        ndvi: Optional[bool]
+            Optional: Set to True to compute the Normalized Difference Vegetation Index (NDVI) and add to training data DataFrame
 
     Returns
     -------
-        df_train: DataFrame
-            DataFrame of training data
+        training_data_df: DataFrame
+            pandas DataFrame of training data
     """
 
-    flag_output = True
-
-    # rasterize ROI
+    # rasterize labeled polygons (our Regions of Interest, or ROI)
     ROI = vector_rasterize(
-        dir_vector=dir_ROI,
-        dir_raster=dir_raster,
-        dir_out=dir_ROIraster,
-        flag_output=flag_output,
+        labeled_polygons_filepath=labeled_polygons_filepath,
+        training_image_filepath=training_image_filepath,
+        rasterized_mask_output_filepath=rasterized_mask_output_filepath,
     )
 
     # save surface reflectance and label to csv file
     N_scale = 10000.0
-    img = rasterio.open(dir_raster)
-    ROI = rasterio.open(dir_ROIraster)
+    img = rasterio.open(training_image_filepath)
     img_read = img.read() / N_scale
     df_img = pd.DataFrame(img_read.reshape([4, -1]).T)
-    df_label = pd.DataFrame(ROI.read().reshape([1, -1]).T)
-    df_train = pd.concat([df_img, df_label], axis=1)
-    df_train.columns = ["blue", "green", "red", "nir", "label"]
-    df_train["ndvi"] = (df_train["nir"] - df_train["red"]) / (
-        df_train["nir"] + df_train["red"]
-    )
-    df_train = df_train[df_train.label != 9]
-    df_train.label = np.where(df_train.label > 0, 1, 0)
-    dir_samples = dir_samples_root + str(int(len(df_train.index) / 1000)) + "k.csv"
-    df_train.to_csv(dir_samples, index=False)
+    df_label = pd.DataFrame(ROI.reshape([1, -1]).T)
+    training_data_df = pd.concat([df_img, df_label], axis=1)
+    training_data_df.columns = ["blue", "green", "red", "nir", "label"]
+    if ndvi:
+        training_data_df["ndvi"] = (
+            training_data_df["nir"] - training_data_df["red"]
+        ) / (training_data_df["nir"] + training_data_df["red"])
+    training_data_df = training_data_df[training_data_df.label != 9]
+    training_data_df.label = np.where(
+        training_data_df.label > 0, 1, 0
+    )  # any labels with a value > 0 is set to 1
+    if isinstance(training_data_filepath, str):
+        print(f"Saving training data DataFrame to: {training_data_filepath}")
+        training_data_df.to_csv(training_data_filepath, index=False)
 
-    return df_train
+    return training_data_df.reset_index(drop=True)
 
 
 def train_model(
