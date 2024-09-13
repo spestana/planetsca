@@ -1,6 +1,8 @@
-# Creating a training data set with QGIS and planetsca
+Creating a training data set with QGIS and planetsca
+============
 
-##  Introduction
+Introduction
+------------
 
 The following instructions describe the steps to create a training data set for a Planet Snow Covered Area (SCA) random forest classifier model. This example will use [QGIS](https://qgis.org/), an open-source geographic information system (GIS) desktop application, but similar steps can be taken in proprietary software like ArcGIS to accomplish the same things.
 
@@ -8,7 +10,8 @@ To create a training data set, we will need access to at least one Planet Scope 
 
 After creating this file, we will use the training module of the planetsca library to create the final training dataset, with which we can train a new random forest classifier model to detect snow in Planet Scope images.
 
-## Select a sample Planet Scope image
+Select a sample Planet Scope image
+----------------------------------
 
 You will need a sample Planet Scope image to create a training data set. You can use the search and download functions of planetsca to retrieve an image you'd like to use. In a new QGIS project, import this image by going to the *Layer* menu, then *Add Layer*, and *Add Raster Layer* (alternatively you can drag and drop the file into the Layers panel).
 
@@ -24,7 +27,8 @@ We could also visualize the fourth, near-infrared (NIR) band as well.
 
 ![Example Planet Scope images](/docs/doc_images/training_data_3.jpg "Example Planet Scope images")
 
-## Create new shapefile layer
+Create new shapefile layer
+--------------------------
 
 We will use polygons (in a shapefile layer) to outline areas of snow or no snow in our sample image.
 
@@ -40,7 +44,8 @@ You will see your new layer show up in the Layers panel.
 
 ![Layers panel showing shapefile layer](/docs/doc_images/training_data_6.jpg "Layers panel showing shapefile layer")
 
-## Label the training dataset
+Label the training dataset
+--------------------------
 
 To begin the process of outlining areas of snow or no snow in the sample image, select the shapefile layer in the layers panel, click on the pencil icon in the top menu bar to *toggle editing*, then click on the shape icon to *add polygon feature*.
 
@@ -82,13 +87,15 @@ If you need to edit the polygons' labels, you can right-click on your shapefile 
 
 ![Editing attributes table](/docs/doc_images/training_data_15.jpg "Editing attributes table")
 
-## Export the labeled polygons
+Export the labeled polygons
+---------------------------
 
 Right click on the shapefile layer in the layers panel, and click *Export* then *Save Features As*. Save this as a ``GeoJSON`` format and make sure that the ``label`` field checkbox selected. Click *OK* to export this to a file.
 
 ![Export to GeoJSON file](/docs/doc_images/training_data_16.jpg "Export to GeoJSON file")
 
-## Create training data with planetsca
+Create training data with planetsca
+-----------------------------------
 
 Finally, you can use the planetsca library to create the training data.
 
@@ -110,6 +117,7 @@ training_data_df = train.data_training_new(
 
 See the demo Jupyter Notebooks and planetsca documentation for further details.
 
-## Other resources
+Other resources
+---------------
 
 * [QGIS Tutorials](https://www.qgistutorials.com/en/)
