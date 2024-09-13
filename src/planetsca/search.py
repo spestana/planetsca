@@ -1,10 +1,89 @@
-import json
 from typing import List, Literal
 
+import geopandas as gpd
+import requests
+from requests.auth import HTTPBasicAuth
 from shapely.geometry import shape
 
+from planetsca import simplify_aoi
 
-def make_domain_geometry_from_bounds(bounds: list[float]):
+
+def search(api_key: str, filter: dict, item_type: str = "PSScene") -> gpd.GeoDataFrame:
+    """
+    Sends a request to the Planet API to find if data is available
+
+    Parameters
+    ----------
+        api_key: str
+            Planet API key
+        filter: dict
+            Dictionary containing data filter information
+        item_type: str
+            Class of spacecraft and/or processing level of an item, defaults to PSScene. See https://developers.planet.com/docs/apis/data/items-assets/
+
+    Returns
+    -------
+        gdf: geopandas.geodataframe.GeoDataFrame
+            GeoDataFrame containing information about the Planet images returned by the search
+    """
+
+    # Search API request object
+    search_endpoint_request = {"item_types": [item_type], "filter": filter}
+    response = requests.post(
+        "https://api.planet.com/data/v1/quick-search",
+        auth=HTTPBasicAuth(api_key, ""),
+        json=search_endpoint_request,
+    )
+
+    # check to make sure we received items in the response
+    if len(response.json()["features"]) > 0:
+        print(f"Search returned {len(response.json()['features'])} items.")
+        # use the response from the Planet API to make a geodataframe of the returned image IDs and info
+        gdf = response_to_gdf(response, filter)
+        return gdf
+    else:
+        print(
+            f"Search returned {len(response.json()['features'])} items. Try changing search filters"
+        )
+        return None
+
+
+def response_to_gdf(response: requests.Response, filter: dict):
+    """
+    Creates geodataframe of image IDs and other information from a Planet API response
+
+    Parameters
+    ----------
+        response: requests.Response
+            Response object from the Planet API containing information about images that matched search criteria
+        filter: dict
+            Dictionary containing data filter information
+
+    Returns
+    -------
+        gdf: geopandas.geodataframe.GeoDataFrame
+            GeoDataFrame containing information about the Planet images returned by the search
+    """
+
+    domain_geometry = shape(get_filter(filter, "GeometryFilter")["config"])
+
+    # view available data and prepare the list of planet IDs to download
+    geojson_data = response.json()
+    gdf = gpd.GeoDataFrame.from_features(geojson_data["features"])
+
+    # Add a new column to 'gdf' with the intersection area
+    gdf["intersection_area"] = gdf["geometry"].intersection(domain_geometry).area
+
+    # Calculate the percentage overlap
+    gdf["overlap_percentage"] = (gdf["intersection_area"] / domain_geometry.area) * 100
+
+    # get image IDs and add to geodataframe
+    gdf["id"] = [feature["id"] for idx, feature in enumerate(geojson_data["features"])]
+
+    return gdf
+
+
+def make_domain_geometry_from_bounds(bounds: List[float]):
     """
     Make a shapely geometry polygon from from longitude and latitude bounds (a rectangular area)
 
@@ -42,7 +121,7 @@ def make_domain_geometry_from_bounds(bounds: list[float]):
     return geo_json_geometry, domain_geometry
 
 
-def make_geometry_filter_from_bounds(bounds: list[float]) -> dict:
+def make_geometry_filter_from_bounds(bounds: List[float]) -> dict:
     """
     Make a geometry filter dictionary for the Planet API from longitude and latitude bounds (a rectangular search area)
 
@@ -85,14 +164,7 @@ def make_geometry_filter_from_geojson(geojson_filepath: str) -> dict:
             dictionary geometry filter for the Planet API
     """
 
-    with open(geojson_filepath, "r") as file:
-        geojson_data = json.load(file)
-
-    coords = []
-
-    coords.extend(
-        [coord for polygon in geojson_data["coordinates"] for coord in polygon]
-    )
+    coords = simplify_aoi.get_coordinates(geojson_filepath)
 
     geo_json_geometry = {
         "type": "Polygon",
@@ -186,3 +258,29 @@ def combine_filters(
         "config": filters,
     }
     return filter
+
+
+def get_filter(
+    filter: dict,
+    filter_type: Literal[
+        "GeometryFilter", "DateRangeFilter", "RangeFilter", "AndFilter", "OrFilter"
+    ],
+):
+    """
+    Return an individual filter from a dictionary containing multiple Planet API search filters created with search_filters.combine_filters()
+
+    Parameters
+    ----------
+    filter: dict
+        Filter dict
+    filter_type:  Literal["GeometryFilter", "DateRangeFilter", "RangeFilter", "AndFilter", "OrFilter"]
+        Specify which sub-filter we want to return
+    Returns
+    -------
+    sub_filter: dict
+        sub-filter within the larger filter dict
+    """
+
+    sub_filter = next(item for item in filter["config"] if item["type"] == filter_type)
+
+    return sub_filter

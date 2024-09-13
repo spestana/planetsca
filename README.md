@@ -1,117 +1,74 @@
-# PlanetSCA Python Library
+# PlanetSCA
 
-### This is a python library for mapping snow covered areas (SCA) from high-resolution PlanetScope images using a Random Forest model.
+**PlanetSCA** is an open source python library for mapping snow covered areas
+(SCA) from high-resolution PlanetScope images using a Random Forest model. This
+package was developed from [original work by Kehan Yang and others](#citations).
 
-Originally modeled from Kehan Yang:
-[Kehan's Project](https://github.com/KehanGit/High_resolution_snow_cover_mapping/blob/main/01_download_planetscope_images.ipynb)
+This library also include access to a
+[pre-trained model](https://huggingface.co/geo-smart/planetsca_models) for
+mapping SCA in PlanetScope imagery, and
+[sample data](https://huggingface.co/datasets/geo-smart/planetsca_datasets) to
+demonstrate the library's functions.
 
-[TestPyPi](https://test.pypi.org/project/planetsca/)
-
-[Pre-Trained Model](https://huggingface.co/geo-smart/planetsca_models)
-
-[Sample Data](https://huggingface.co/datasets/geo-smart/planetsca_datasets)
-
-This requires you to have an account with Planet and an
-[API key](https://developers.planet.com/quickstart/apis/#find-your-api-key) for
-data access.
+The search and download functions require you to have an account with Planet and
+an [API key](https://developers.planet.com/quickstart/apis/#find-your-api-key).
 
 ![PyPlanetSCA](https://raw.githubusercontent.com/DSHydro/PyPlanetSCA-Python-Library/main/additional_assets/PyPlanetSCA_Image.png)
 
-#### Table of Contents <a name="table_of_contents"></a>
+## Documentation
 
-1. [Installation](#installation)
-2. [Running the Code](#running)
-3. [Functions](#functions)
-4. [Virtual Environments](#VENV)
+Please see the [website](https://dshydro.github.io/planetsca/) for more
+information and detailed documentation.
 
-<br></br>
+## Installation
 
-## Installation <a name="installation"></a>
+Python must already be installed in your current working environment.
+Instructions to create a new conda environment from the terminal, or with VENV
+in VSCode, are available [here](#setting-up-an-environment).
 
-Python must already be installed in your current working environment. See the
-bottom of this README for instructions to create a new conda environment from
-the terminal, or with VENV in VSCode.
-
-To install the python package, use:
+To install the python package from
+[TestPyPi](https://test.pypi.org/project/planetsca/), use:
 
 ```bash
 pip install --extra-index-url https://test.pypi.org/simple planetsca
 ```
 
-## Development
+## Running the code
 
-1. Clone the repository
-
-   ```bash
-   git clone https://github.com/DSHydro/planetsca.git
-   ```
-
-2. Go to the repository
-
-   ```bash
-   cd planetsca
-   ```
-
-3. Install the package
-
-   ```bash
-   pip install -e ".[dev]"
-   ```
-
-4. Setup pre-commit
-
-   ```bash
-   pre-commit install
-   ```
-
-5. Now you are ready to use and develop the package!
-
-## Running the code <a name="running"></a>
-
-1. Import modules
+1. Import planetsca
 
 ```
-from planetsca import data_gathering as dg
-from planetsca import data_preparation as dp
-from planetsca import model_training as mt
-from planetsca import prediction_evaluation as pe
-import numpy as np
+import planetsca as ps
 ```
 
-2a. Data Gathering Variable Setup
+2. Search for PlanetScope imagery
 
 ```
-# enter the Planet user API key
-domain = '551'
-apiKey = '_________'
-item_type = "PSScene"
-asset_type = "ortho_analytic_4b_sr"
-bundle_type = "analytic_sr_udm2"
-out_direc = '_________' #Replace with folder containing environment
+api_key = '' # your Planet user API key
+
+# Set up a filter to search a specific time range and region, and to avoid cloudy images:
+date_range_filter = ps.search.make_date_range_filter("2024-01-14T00:00:00.000Z", "2024-01-17T00:00:00.000Z")
+geometry_filter = ps.search.make_geometry_filter_from_bounds([-105.886, 40.519, -105.872, 40.529])
+#geometry_filter = ps.search.make_geometry_filter_from_geojson('my_study_area.geojson') # or use a geojson file
+cloud_filter = ps.search.make_cloud_cover_filter(0.05)
+filter = ps.search.combine_filters([date_range_filter, geometry_filter, cloud_filter])
+
+# search, results are returned as a geopandas.GeoDataFrame
+search_results_gdf = ps.search.search(api_key, filter)
 ```
 
-2b. Data Gathering Path 1
+3. Order and download data
 
 ```
-# data download location
-domain_geometry = dg.domain_shape()
-print(domain_geometry)
+# submit an order using image IDs from the search results
+id_list = search_results_gdf.id.to_list()
+order_url = ps.download.order(api_key, id_list, filter)
 
-result = dg.search_API_request_object(item_type, apiKey, domain)
-id_list, geom_list = dg.prep_ID_geometry_lists(result, domain)
-order_urls = dg.prepare_submit_orders(id_list, item_type, bundle_type, apiKey, domain)
-dg.save_data_to_csv(order_urls)
-dg.download_ready_orders(order_urls, out_direc, apiKey)
-#dg.display_image(fp)
+# download
+ps.download.download(api_key, order_url, out_dirpath='./output_directory')
 ```
 
-2c. Data Gathering Path 2
-
-```
-dg.retrieve_dataset(out_direc, file)
-```
-
-3a. Data Preparation Variable Setup
+4. Data Preparation Variable Setup
 
 ```
 #Set up Paths
@@ -122,19 +79,19 @@ dir_samples_root = ""
 dir_samples = ""
 ```
 
-3b. Data Preparation Path 1
+5. Data Preparation Path 1
 
 ```
 df_train = data_training_existing(dir_samples)
 ```
 
-3c. Data Preparation Path 2
+6. Data Preparation Path 2
 
 ```
 data_training_new(dir_ROI, dir_raster, dir_ROIraster, dir_samples_root)
 ```
 
-4a. Model Training Variable Setup
+7. Model Training Variable Setup
 
 ```
 #Setup Paths
@@ -151,19 +108,19 @@ n_repeats =
 df_train =
 ```
 
-4b. Model Training Path 1
+8. Retrieve the existing SCA model from Hugging Face
 
 ```
-mt.train_model(dir_model, dir_score, n_estimators, max_depth, max_features, random_state, n_splits, n_repeats, df_train)
+ps.model_training.retrieve_model(out_direc, file)
 ```
 
-4c. Model Training Path 2
+9. Or train a new model
 
 ```
-mt.retrieve_model(out_direc, file)
+ps.model_training.train_model(dir_model, dir_score, n_estimators, max_depth, max_features, random_state, n_splits, n_repeats, df_train)
 ```
 
-5a. Prediction Evaluation Variable Setup
+10. Prediction Evaluation Variable Setup
 
 ```
 #Set up directory paths of file locations
@@ -174,24 +131,15 @@ model = ""
 nodata_flag = 9
 ```
 
-6. Prediction Evaluation
+11. Prediction Evaluation
 
 ```
-pe.run_sca_prediction(dir_raster, dir_out, nodata_flag, model)
+ps.prediction_evaluation.run_sca_prediction(dir_raster, dir_out, nodata_flag, model)
 ```
 
-<br></br>
+## Setting up an environment
 
-## Functions <a name="functions"></a>
-
-Please see the [website](https://dshydro.github.io/planetsca/) for more
-information and documentation on functions.
-
-<br></br>
-
-## Setting up your environment
-
-### Setting up a Virtual Environment (VENV) on VSCode <a name="venv"></a>
+### Setting up a Virtual Environment (VENV) on VSCode
 
 Creating a VENV is recommended for this project as it ensures that there are no
 package conflicts and that troubleshooting is much easier. The following
@@ -209,7 +157,7 @@ instructions are summarized from
    virtual environment alongside with VScode. There is no need to repeat these
    steps unless you do not see step 5.
 
-### Setting up a conda environment in the terminal:
+### Setting up a conda environment in the terminal
 
 Find detailed instructions
 [here](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands).
@@ -229,3 +177,63 @@ To use jupyter notebooks with this conda environment:
    `python -m ipykernel install --user --name=planetenv`
 4. When you start a jupyter notebook, you can now select the `planetenv`
    environment kernel
+
+## Citations
+
+When using this package, please **cite both the package and the original study
+describing the model**:
+
+Citing PlanetSCA:
+
+Citing the original study:
+
+- Yang K., John A., Shean D., Lundquist J.D., Sun Z., Yao F., Todoran S., and
+  Cristea N. (2023) High-resolution mapping of snow cover in montane meadows and
+  forests using Planet imagery and machine learning. Front. Water 5:1128758.
+  doi: [10.3389/frwa.2023.1128758](https://doi.org/10.3389/frwa.2023.1128758)
+
+Other material of interest:
+
+- Code from the original study which was adapted into this library can be found
+  [here](https://github.com/KehanGit/High_resolution_snow_cover_mapping).
+- A tutorial describing the random forest model in the original study is
+  published as a GeoScience Machine Learning Resources and Training (GeoSMART)
+  [here](https://geo-smart.github.io/scm_geosmart_use_case/chapters/one.html).
+
+## Contributing
+
+We welcome new contributions, improvements, and bug fixes! New features and
+ideas for the package within the scope of snow remote sensing using Planet
+imagery are also welcome. Please create an issue to discuss a new feature of bug
+fix.
+
+To contribute code addressing new features or bug fixes, follow these steps:
+
+1. Fork the repository
+2. Clone your fork to your working environment
+   ```bash
+   git clone https://github.com/<your_username>/planetsca.git
+   ```
+3. Go to the repository
+   ```bash
+   cd planetsca
+   ```
+4. Install the package
+   ```bash
+   pip install -e ".[dev]"
+   ```
+5. Setup pre-commit
+   ```bash
+   pre-commit install
+   ```
+6. Create a feature branch with a descriptive name (e.g.
+   `bug-fix-planet-api-change`). This command will also switch you to this new
+   branch.
+   ```bash
+   git checkout -b new-branch-name
+   ```
+7. After making your changes, run pre-commit before pushing those changes to
+   your new branch
+8. Then submit a pull request (PR) from the feature branch of your fork to
+   `DSHydro/planetsca:main`
+9. The PR will be reviewed by at least one maintainer, discussed, then merged
