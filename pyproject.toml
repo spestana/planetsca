@@ -28,7 +28,9 @@ dependencies = [
 ]
 requires-python = ">=3.8"
 authors = [
-    { name = "Ian Chiu", email = "ianchiu333@gmail.com" }
+    {name = "Ian Chiu", email = "ianchiu333@gmail.com"},
+    {name = "Steven Pestana", email = "spestana@uw.edu"},
+    {name = "Nicoleta Cristea", email = "cristn@uw.edu"},
 ]
 license = {file = "LICENSE"}
 

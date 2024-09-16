@@ -5,4 +5,5 @@ __all__ = [
     "train",
     "predict",
     "search",
+    "simplify_aoi",
 ]
