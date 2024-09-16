@@ -1,5 +1,5 @@
 Creating a training data set with QGIS and planetsca
-============
+=====================================================
 
 Introduction
 ------------
