@@ -12,14 +12,19 @@ Welcome to PlanetSCA's documentation
 ```
 
 .. toctree::
+   :caption: Documentation
    :maxdepth: 2
-   :caption: Contents:
 
    installation
    running
+   training_data
+
+.. toctree::
+   :caption: API Reference
+   :maxdepth: 2
+
    search_module
    download
    train
    predict
    simplify_aoi
-   training_data
