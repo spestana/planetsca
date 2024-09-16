@@ -4,7 +4,7 @@ Creating Training Data
 Introduction
 ------------
 
-The following instructions describe the steps to create a training data set for a Planet Snow Covered Area (SCA) random forest classifier model. This example will use [QGIS](https://qgis.org/), an open-source geographic information system (GIS) desktop application, but similar steps can be taken in proprietary software like ArcGIS to accomplish the same things.
+The following instructions describe the steps to create a training data set for a Planet Snow Covered Area (SCA) random forest classifier model. This example will use `QGIS <https://qgis.org/>`_, an open-source geographic information system (GIS) desktop application, but similar steps can be taken in proprietary software like ArcGIS to accomplish the same things.
 
 To create a training data set, we will need access to at least one Planet Scope image where snow is present on the landscape, representative of the region we’d like to map SCA in. We will create a geojson or shapefile (a collection of polygons) outlining areas of snow (labeled ``1``) and areas without snow (labeled ``0``) that we can visually identify.
 
@@ -169,4 +169,4 @@ See the demo Jupyter Notebooks and planetsca documentation for further details.
 Other resources
 ---------------
 
-* [QGIS Tutorials](https://www.qgistutorials.com/en/)
+* `QGIS Tutorials <https://www.qgistutorials.com/en/>`_
