@@ -28,7 +28,6 @@ jobs:
           pip install sphinx
           pip install furo
           pip install fiona
-          pip install ghp-import
 
       - name: Build Sphinx documentation
         run: |
