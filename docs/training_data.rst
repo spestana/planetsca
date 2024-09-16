@@ -100,6 +100,7 @@ Create training data with planetsca
 Finally, you can use the planetsca library to create the training data.
 
 .. code-block::
+
     # import the planetsca train module
     from planetsca import train
 
