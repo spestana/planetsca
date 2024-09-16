@@ -14,7 +14,7 @@ Welcome to PlanetSCA's documentation
 
    installation
    running
-   search
+   search_module
    download
    train
    predict
