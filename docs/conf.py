@@ -17,6 +17,7 @@ project = "PlanetSCA"
 copyright = "2024, DSHydro"
 author = "DSHydro"
 release = "1.0.0"
+# the page title will default to "<project> <relsease> documentation" e.g. PlanetSCA 1.0.0 documentation
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
