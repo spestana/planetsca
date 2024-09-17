@@ -153,18 +153,21 @@ Finally, you can use the planetsca library to create the training data.
     from planetsca import train
 
     # provide filepaths to geojson and sample Planet Scope image
-    labeled_polygons_filepath = "planetsca_training_data_polygons.geojson"
-    training_image_filepath = "20240116_170700_24_24b0_3B_AnalyticMS_SR_clip.tif"
+    labeled_polygons_filepath = "./example_training_data/planetsca_training_data_polygons.geojson"
+    training_image_filepath = "./example_training_data/20240116_170700_24_24b0_3B_AnalyticMS_SR_clip.tif"
 
     # create the training data, also save it to a csv file
     training_data_df = train.data_training_new(
         labeled_polygons_filepath,
         training_image_filepath,
-        training_data_filepath="my_training_data.csv",
+        training_data_filepath="./example_training_data/example_training_data.csv",
     )
 
+    # preview what the resulting dataframe looks like
+    training_data_df.head()
 
-See the demo Jupyter Notebooks and planetsca documentation for further details.
+
+You’re now ready to move on to train a new model and then make predictions!
 
 Other resources
 ---------------
