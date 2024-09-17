@@ -2,11 +2,14 @@ import json
 import os
 import pathlib
 import time
-from typing import List
+from typing import List, Optional
 
+import joblib
+import onnx
 import requests
 from huggingface_hub import hf_hub_download
 from requests.auth import HTTPBasicAuth
+from sklearn.ensemble import RandomForestClassifier
 
 from planetsca import search
 
@@ -197,36 +200,84 @@ def download(
     return None
 
 
-def retrieve_dataset(out_direc, file):
+def retrieve_dataset(filename: str, out_dirpath: Optional[str] = ".") -> str:
     """
-    Downloads datasets from Hugging Face
+    Downloads sample datasets for PlanetSCA model from Hugging Face
 
     Parameters
     ----------
-        out_direc: str
-            File path to output directory
-        file: str
-            File name to download
+        filename: str
+            Filename of one of the PlanetSCA files on Hugging Face, see list of files here: https://huggingface.co/datasets/geo-smart/planetsca_datasets/tree/main
+        out_dirpath: Optional[str]
+            Path to directory to save file
+
+    Returns
+    ---------
+        filepath: str
+            Path to local file
     """
 
-    hf_hub_download(
+    filepath = hf_hub_download(
         repo_id="geo-smart/planetsca_datasets",
-        filename=file,
-        local_dir=out_direc,
+        repo_type="dataset",
+        filename=filename,
+        local_dir=out_dirpath,
     )
 
+    return filepath
 
-def retrieve_model(out_direc, file):
+
+def retrieve_model(out_dirpath: Optional[str] = None) -> RandomForestClassifier:
     """
-    Downloads pre-trained models from hugging faces
+    Downloads pre-trained PlanetSCA model from Hugging Face
 
     Parameters:
-        out_direc: String file path to output directory
-        file: String file name to download
+        out_dirpath: Optional[str]
+            Path to directory to save pre-trained model file
+
+    Returns
+    ----------
+        model: RandomForestClassifier
+            The trained PlanetSCA model
     """
 
-    hf_hub_download(
+    # download model file from Hugging Face
+    filepath = hf_hub_download(
         repo_id="geo-smart/planetsca_models",
-        filename=file,
-        local_dir=out_direc,
+        filename="random_forest_20240116_binary_174K.joblib",
+        local_dir=out_dirpath,
     )
+
+    # open the model that was just downloaded
+    model = joblib.load(filepath)
+
+    return model
+
+
+def retrieve_model_onnx(
+    out_dirpath: Optional[str] = None,
+) -> onnx.onnx_ml_pb2.ModelProto:
+    """
+    Downloads pre-trained PlanetSCA model from Hugging Face (ONNX format)
+
+    Parameters:
+        out_dirpath: Optional[str]
+            Path to directory to save pre-trained model file
+
+    Returns
+    ----------
+        model: onnx.onnx_ml_pb2.ModelProto
+            The trained PlanetSCA model (ONNX format)
+    """
+
+    # download model file from Hugging Face
+    filepath = hf_hub_download(
+        repo_id="geo-smart/planetsca_models",
+        filename="random_forest_20240116_binary_174K.onnx",
+        local_dir=out_dirpath,
+    )
+
+    # open the model that was just downloaded
+    model = onnx.load(filepath)
+
+    return model

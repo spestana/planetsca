@@ -21,7 +21,9 @@ dependencies = [
     "requests",
     "shapely",
     "geopandas",
-    "fiona"
+    "fiona",
+    "skl2onnx",
+    "onnxruntime",
 
 ]
 requires-python = ">=3.8"
