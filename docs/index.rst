@@ -14,6 +14,7 @@ Welcome to PlanetSCA's documentation
    :maxdepth: 1
 
    installation
+   examples/quick_start
    examples/search_download
    training_data
    examples/train_predict
