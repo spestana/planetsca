@@ -77,7 +77,7 @@ def predict_sca(
     nodata_flag: int = 9,
 ) -> Union[str, List[str]]:
     """
-    This function predicts binary snow cover from PlanetScope satellite images using a random forest model
+    This function predicts binary snow cover from PlanetScope satellite images using an ONNX random forest model
 
     Parameters
     ----------
@@ -163,14 +163,29 @@ def predict_sca(
     return sca_image_paths
 
 
-def predict_with_onnxruntime(model, X):
+def predict_with_onnxruntime(
+    model: onnx.onnx_ml_pb2.ModelProto, X: np.array
+) -> np.array:
     """
-    Predict using an ONNX model
+    Run a prediction with an ONNX model
+
+    Parameters
+    ----------
+        model: onnx.onnx_ml_pb2.ModelProto
+            an onnx.onnx_ml_pb2.ModelProto model object
+        X: np.array
+            an array of input data of shape (n_samples, 4)
+
+    Returns
+    ----------
+        predictions: np.array
+            an array of predicted labels for snow (1) or no snow (0) of shape (n_samples, 4)
     """
     sess = InferenceSession(model.SerializeToString())
     input_name = sess.get_inputs()[0].name
     res = sess.run(None, {input_name: X.astype(np.float32)})
-    return res[0]
+    predictions = res[0]
+    return predictions
 
 
 def check_inputs_onnx(
@@ -179,7 +194,7 @@ def check_inputs_onnx(
     output_dirpath: str = "",
 ) -> int:
     """
-    Check the inputs for the predict_sca function
+    Check the inputs for the predict_sca_onnx function
 
     Parameters
     ----------
@@ -239,7 +254,7 @@ def predict_sca_onnx(
     nodata_flag: int = 9,
 ) -> Union[str, List[str]]:
     """
-    This function predicts binary snow cover from PlanetScope satellite images using a random forest model
+    This function predicts binary snow cover from PlanetScope satellite images using an ONNX random forest model
 
     Parameters
     ----------
