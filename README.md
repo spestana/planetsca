@@ -13,7 +13,7 @@ demonstrate the library's functions.
 The search and download functions require you to have an account with Planet and
 an [API key](https://developers.planet.com/quickstart/apis/#find-your-api-key).
 
-![PyPlanetSCA](https://raw.githubusercontent.com/DSHydro/PyPlanetSCA-Python-Library/main/additional_assets/PyPlanetSCA_Image.png)
+![PyPlanetSCA](additional_assets/PyPlanetSCA_Image.png)
 
 ## Documentation
 
