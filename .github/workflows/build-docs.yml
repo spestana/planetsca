@@ -31,6 +31,7 @@ jobs:
           pip install ghp-import
           pip install myst-parser
           pip install nbsphinx
+          pip install ipykernel
 
       - name: Build Sphinx documentation
         run: |
