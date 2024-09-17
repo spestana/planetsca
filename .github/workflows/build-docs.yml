@@ -30,6 +30,7 @@ jobs:
           pip install fiona
           pip install ghp-import
           pip install myst-parser
+          pip install nbsphinx
 
       - name: Build Sphinx documentation
         run: |
