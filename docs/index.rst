@@ -10,19 +10,12 @@ Welcome to PlanetSCA's documentation
    :parser: myst
 
 .. toctree::
-   :caption: Documentation
-   :maxdepth: 2
-
-   installation
-   running
-   training_data
-
-.. toctree::
-   :caption: Examples
+   :caption: Getting Started
    :maxdepth: 1
 
+   installation
    examples/search_download
-   examples/make_training_data
+   training_data
    examples/train_predict
 
 .. toctree::
