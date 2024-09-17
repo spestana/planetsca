@@ -18,6 +18,14 @@ Welcome to PlanetSCA's documentation
    training_data
 
 .. toctree::
+   :caption: Examples
+   :maxdepth: 1
+
+   examples/search_download
+   examples/make_training_data
+   examples/train_predict
+
+.. toctree::
    :caption: API Reference
    :maxdepth: 2
 
