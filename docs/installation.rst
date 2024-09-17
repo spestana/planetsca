@@ -6,7 +6,8 @@ Installation
     Python must already be installed in your current working environment. Instructions to create a new environment for planetsca are available :ref:`here <setting-up-an-environment>`.
 
 .. attention::
-    For data access, you must have an `API key <https://developers.planet.com/quickstart/apis/#find-your-api-key>` from Planet.
+
+    For data access, you must have an `API key <https://developers.planet.com/quickstart/apis/#find-your-api-key>`_ from Planet.
 
 Installing with pip
 -------------------
@@ -25,8 +26,7 @@ Setting up an environment
 Setting up a conda environment in the terminal
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Find detailed instructions
-[here](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands).
+Find detailed instructions `here <https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands>`_.
 
 1. Open a terminal
 2. Create a new environment called "planetenv" with python version 3.8 or
