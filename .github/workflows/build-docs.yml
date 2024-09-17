@@ -32,6 +32,7 @@ jobs:
           pip install myst-parser
           pip install nbsphinx
           pip install ipykernel
+          pip uninstall pandoc
           conda install -c conda-forge pandoc
 
       - name: Build Sphinx documentation
