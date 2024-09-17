@@ -43,6 +43,10 @@ doc = [
     "pandoc",
     "sphinx",
     "furo",
+    "myst-parser",
+    "nbsphinx",
+    "ipykernel",
+    "ghp-import",
 ]
 
 [project.urls]
