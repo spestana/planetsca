@@ -18,6 +18,7 @@ Welcome to PlanetSCA's documentation
    examples/search_download
    training_data
    examples/train_predict
+   examples/convert_model
 
 .. toctree::
    :caption: API Reference
