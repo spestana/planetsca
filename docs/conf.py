@@ -6,6 +6,8 @@
 import os
 import sys
 
+from planetsca import __version__
+
 sys.path.insert(0, os.path.abspath("../src/planetsca"))
 
 autosummary_generate = True
@@ -16,7 +18,8 @@ autosummary_generate = True
 project = "PlanetSCA"
 copyright = "2024, DSHydro"
 author = "DSHydro"
-release = "1.0.0"
+version = __version__
+release = __version__
 # the page title will default to "<project> <relsease> documentation" e.g. PlanetSCA 1.0.0 documentation
 
 # -- General configuration ---------------------------------------------------
